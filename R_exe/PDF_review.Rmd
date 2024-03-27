@@ -2,7 +2,8 @@
 title: "Review of PDF and R"
 author: "Emanuele Coradin"
 date: "March 2024"
-output:
+output: 
+  read_document: rmdformats::readthedown
   html_document:
     number_sections: true
     theme: spacelab
@@ -27,6 +28,8 @@ Now we will experiment with them with same simple exercise.
 
 The Binomial probability function is described by:
 $P(X = k) = \binom{n}{k} \cdot p^k \cdot (1 - p)^{n - k}$
+
+It's the probability followed by the sum of n indipendent Bernoulli trials
 
 First of all let's define a palette.
 
@@ -117,6 +120,8 @@ title("Theoretical Binomial Distribution P = 0.2")
 
 The Geometric distribution can be described by: $P(X = k) = (1 - p)^{k - 1} \cdot p$
 
+It gives us the number of trials to get the first success
+
 Now let's visualize it.
 
 ```{r}
@@ -130,16 +135,16 @@ x <- 0:20
 
 #define a function to prepare the plots
 plot_pdf <- function(P) {dgeom(x, P)}
-binomial_pdf <- sapply(p, plot_pdf)
+geom_pdf <- sapply(p, plot_pdf)
 
 
 # create the first straight line plot
-plot(x,binomial_pdf[,1], type = "s", lwd = 2, col = color_vector[1], 
-     xlab = "Number of Successes", ylab = "Probability", lty = linetype[1], log="y")
+plot(x,geom_pdf[,1], type = "s", lwd = 2, col = color_vector[1], 
+     xlab = "Index of first success", ylab = "Probability", lty = linetype[1], log="y")
 
 # create all the others
 for (i in 2:length(p)) {
-  lines(x, binomial_pdf[, i], col=color_vector[i], type='s', lwd=2, lty = linetype[i])
+  lines(x, geom_pdf[, i], col=color_vector[i], type='s', lwd=2, lty = linetype[i])
 
 }
 
@@ -151,5 +156,47 @@ legend_labels <- paste("p =", p)
 legend("topright", legend = legend_labels, col = color_vector[1:length(p)], lty = linetype, lwd = 2)
 # Add a title
 title("Theoretical Geometric distribution")
+
+```
+
+## Poisson Process
+
+## Poisson Distribution
+It' described by: 
+
+It can be derived by the Binomial distribution when the rate of success is close to 0.
+
+```{r}
+# Parameters for the binomial distribution
+
+lambda <- c(5, 10, 15, 20)  # number of trials
+linetype <- 2-(1:length(lambda))%%2
+
+# Generate values for x (number of successes)
+x <- 0:20
+
+#define a function to prepare the plots
+plot_pdf <- function(L) {dpois(x, L)}
+poisson_pdf <- sapply(lambda, plot_pdf)
+
+
+# create the first straight line plot
+plot(x,poisson_pdf[,1], type = "s", lwd = 2, col = color_vector[1], 
+     xlab = "Number of Events", ylab = "Probability", lty = linetype[1])
+
+# create all the others
+for (i in 2:length(lambda)) {
+  lines(x, poisson_pdf[, i], col=color_vector[i], type='s', lwd=2, lty = linetype[i])
+
+}
+
+grid()  # Add grid
+
+# Create legend labels with strings
+legend_labels <- paste("lambda = ", lambda)
+# Add a legend
+legend("topright", legend = legend_labels, col = color_vector[1:length(lambda)], lty = linetype, lwd = 2)
+# Add a title
+title("Theoretical Poisson Distribution")
 
 ```
