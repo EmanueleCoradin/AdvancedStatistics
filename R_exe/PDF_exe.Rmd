@@ -1,0 +1,116 @@
+---
+title: "Review of PDF and R"
+author: "Emanuele Coradin"
+date: "March 2024"
+output:
+  html_document:
+    theme: spacelab  
+  pdf:
+    theme: spacelab  
+---
+
+# Pairing and ordering objects
+
+We can identify different useful tools to compute the numbers of different pairings as orderings that we can apply to a sequence of length r taken from a dictionary of n objects.
+
+# Probability distributions in R
+
+R provides almost all the standard PDFs that we could wish. The name convention prescribes: \* d<core-name> for the pdf \* p<core-name> for the cumulative density function (cdf) \* q<core-name> for the quantile function \* r<core-name> to sample a random number from the distribution.
+
+Now we will experiment with them with same simple exercise.
+
+## Binomial distribution
+
+The Binomial probability function is described by:
+$P(X = k) = \binom{n}{k} \cdot p^k \cdot (1 - p)^{n - k}$
+
+First of all let's define a palette.
+
+```{r}
+color_vector <- c("#CC0000",   # Wine-like color
+                  "#0072B2",   # Strong blue
+                  "#CC79A7",   # Muted purple
+                  "#D55E00",   # Vermilion
+                  "#009E73",   # Bluish green
+                  "#56B4E9",   # Sky blue
+                  "#E69F00")   # Yellow-orange
+
+```
+
+```{r}
+# Parameters for the binomial distribution
+
+n <- c(5, 10, 15, 20)  # number of trials
+linetype <- 2-(1:length(n))%%2
+p <- 1./2. # probability of success
+
+# Generate values for x (number of successes)
+x <- 0:20
+
+#define a function to prepare the plots
+plot_pdf <- function(N) {dbinom(x, N, p)}
+binomial_pdf <- sapply(n, plot_pdf)
+
+
+# create the first straight line plot
+plot(x,binomial_pdf[,1], type = "s", lwd = 2, col = color_vector[1], 
+     xlab = "Number of Successes", ylab = "Probability", lty = linetype[1])
+
+# create all the others
+for (i in 2:length(n)) {
+  lines(x, binomial_pdf[, i], col=color_vector[i], type='s', lwd=2, lty = linetype[i])
+
+}
+
+grid()  # Add grid
+
+# Create legend labels with strings "n = "
+legend_labels <- paste("n =", n)
+# Add a legend
+legend("topright", legend = legend_labels, col = color_vector[1:length(n)], lty = linetype, lwd = 2)
+# Add a title
+title("Theoretical Binomial Distribution P = 0.5")
+
+```
+
+```{r}
+# Parameters for the binomial distribution
+
+n <- c(5, 10, 15, 20)  # number of trials
+linetype <- 2-(1:length(n))%%2
+p <- 1./5. # probability of success
+
+# Generate values for x (number of successes)
+x <- 0:20
+
+#define a function to prepare the plots
+plot_pdf <- function(N) {dbinom(x, N, p)}
+binomial_pdf <- sapply(n, plot_pdf)
+
+
+# create the first straight line plot
+plot(x,binomial_pdf[,1], type = "s", lwd = 2, col = color_vector[1], 
+     xlab = "Number of Successes", ylab = "Probability", lty = linetype[1])
+
+# create all the others
+for (i in 2:length(n)) {
+  lines(x, binomial_pdf[, i], col=color_vector[i], type='s', lwd=2, lty = linetype[i])
+
+}
+
+grid()  # Add grid
+
+# Create legend labels with strings "n = "
+legend_labels <- paste("n =", n)
+# Add a legend
+legend("topright", legend = legend_labels, col = color_vector[1:length(n)], lty = linetype, lwd = 2)
+# Add a title
+title("Theoretical Binomial Distribution P = 0.2")
+
+```
+
+## Geometric Distribution
+
+The Geometric distribution can be described by: $P(X = k) = (1 - p)^{k - 1} \cdot p$
+
+Now let's visualize it.
