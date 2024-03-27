@@ -4,10 +4,14 @@ author: "Emanuele Coradin"
 date: "March 2024"
 output:
   html_document:
-    theme: spacelab  
-  pdf:
-    theme: spacelab  
+    number_sections: true
+    theme: spacelab
+  pdf_document:
+    number_sections: true
+    toc: true
+    toc_depth: 2
 ---
+
 
 # Pairing and ordering objects
 
@@ -114,3 +118,38 @@ title("Theoretical Binomial Distribution P = 0.2")
 The Geometric distribution can be described by: $P(X = k) = (1 - p)^{k - 1} \cdot p$
 
 Now let's visualize it.
+
+```{r}
+# Parameters for the binomial distribution
+
+p <- c(1./2., 1/4, 1/10, 10**(-3)) # probability of success
+linetype <- 2-(1:length(p))%%2
+
+# Generate values for x (number of successes)
+x <- 0:20
+
+#define a function to prepare the plots
+plot_pdf <- function(P) {dgeom(x, P)}
+binomial_pdf <- sapply(p, plot_pdf)
+
+
+# create the first straight line plot
+plot(x,binomial_pdf[,1], type = "s", lwd = 2, col = color_vector[1], 
+     xlab = "Number of Successes", ylab = "Probability", lty = linetype[1], log="y")
+
+# create all the others
+for (i in 2:length(p)) {
+  lines(x, binomial_pdf[, i], col=color_vector[i], type='s', lwd=2, lty = linetype[i])
+
+}
+
+grid()  # Add grid
+
+# Create legend labels with strings "p = "
+legend_labels <- paste("p =", p)
+# Add a legend
+legend("topright", legend = legend_labels, col = color_vector[1:length(p)], lty = linetype, lwd = 2)
+# Add a title
+title("Theoretical Geometric distribution")
+
+```
