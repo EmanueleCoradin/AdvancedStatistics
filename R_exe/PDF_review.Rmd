@@ -13,7 +13,6 @@ output:
     toc_depth: 2
 ---
 
-
 # Pairing and ordering objects
 
 We can identify different useful tools to compute the numbers of different pairings as orderings that we can apply to a sequence of length r taken from a dictionary of n objects.
@@ -26,8 +25,7 @@ Now we will experiment with them with same simple exercise.
 
 ## Binomial distribution
 
-The Binomial probability function is described by:
-$P(X = k) = \binom{n}{k} \cdot p^k \cdot (1 - p)^{n - k}$
+The Binomial probability function is described by: $P(X = k) = \binom{n}{k} \cdot p^k \cdot (1 - p)^{n - k}$
 
 It's the probability followed by the sum of n indipendent Bernoulli trials
 
@@ -162,7 +160,8 @@ title("Theoretical Geometric distribution")
 ## Poisson Process
 
 ## Poisson Distribution
-It' described by: 
+
+It' described by:
 
 It can be derived by the Binomial distribution when the rate of success is close to 0.
 

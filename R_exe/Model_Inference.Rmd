@@ -1,0 +1,80 @@
+---
+title: "Models Inference"
+author: "Emanuele Coradin"
+date: "2024-04-08"
+output: 
+  read_document: rmdformats::readthedown
+  html_document:
+    number_sections: true
+    theme: spacelab
+  pdf_document:
+    number_sections: true
+    toc: true
+    toc_depth: 2
+---
+
+------------------------------------------------------------------------
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Model comparison
+
+Given a set of model we want to find out which one is best supported by data, computing and comparing the Posterior Probability
+
+## Bayesian Model Comparison
+
+In the simplest case we compare models with no parameters.
+
+### Problem
+
+- A test for a disease is 90% reliable.
+- The probability of testing positive, in the absence of the disease, is 0.07.
+- Among people aged 40 to 50 with no symptoms, 8 in 1000 have the disease.
+
+If a person in his/her 40 tests positive, what is the probability that he/she has the
+disease ?
+
+We build the following propositions:
+- D: a person is tested positive
+- H: a person has the disease
+
+So the probabilities are: 
+- P(D|H) = 0.9
+- P(D|H* = 0.07
+- P(H) = 0.008
+
+```{r}
+
+post <- function(p.d.m, p.d.notm , p.m) {
+  p.notm <- 1 - p.m
+  odds.ratio <- (p.d.m * p.m) /
+  (p.d.notm * p.notm)
+  p.m.d <- 1/(1 + 1/odds.ratio)
+}
+p.d.m <- seq(0, 1, 0.01) # True positive
+p.d.notm <- 0.07 # False positive
+p.m <- 0.008 # Disease Prior
+p.m.d <- post(p.d.m, p.d.notm , p.m)
+plot(p.d.m, p.m.d, type='l', lwd=2, col='navy')
+p.d.m <- 0.9 # True positive
+p.d.notm <- 10^seq(-4,0, 0.02) # False positive
+p.m <- 0.008 # Disease Prior
+p.m.d <- post(p.d.m, p.d.notm , p.m)
+plot(log10(p.d.notm), p.m.d, type='l', col='navy')
+
+```
+
+## Occam's Razor
+
+
+## Generative models
+
+Theory predicting observable data from model parameters.
+In real life data is always affected by noise: we can also construct noise models "*Measurement model*".
+
+
+
+
+
