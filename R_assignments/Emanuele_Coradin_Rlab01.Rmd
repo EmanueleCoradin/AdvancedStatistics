@@ -40,7 +40,7 @@ The repository <https://drive.google.com/drive/folders/1NESuaJ5yGIrAli1TgrpnK5hn
 -   Birth’s Year
 -   Gender (0=unknown; 1=male; 2=female)
 
-## Points 1-3
+# Points 1-3
 
 1.  Read the data and import them in a data.frame or tibble structure;
 2.  Merge the five data frames in a unique structure;
@@ -79,7 +79,7 @@ head(df)
 
 ```
 
-## Point 4
+# Point 4
 
 4.1 Compute the average and the median trip duration in minutes
 
@@ -130,7 +130,7 @@ p<-ggplot(skimmed_df, aes(tripduration/60, y = after_stat(density))) +
 print(p)
 ```
 
-## Point 5
+# Point 5
 
 Plot the monthly average trip duration
 
@@ -162,7 +162,7 @@ print(p)
 
 ```
 
-## Point 6
+# Point 6
 
 6.1 Plot the number of rides per day
 
@@ -255,7 +255,7 @@ p <- ggplot(hourly_distro, aes(x = hour, y = rides, color = factor(weekends), li
 print(p)
 ```
 
-## Point 7
+# Point 7
 
 7.1 Evaluate the average speed of users
 
@@ -313,7 +313,7 @@ p <- ggplot(skimmed_df[skimmed_df$average_speed*3.6<30 & skimmed_df$average_spee
 print(p)
 ```
 
-## Point 8
+# Point 8
 
 8.1 Find the most common start station and the least popular end station.
 
