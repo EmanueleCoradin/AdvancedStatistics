@@ -122,7 +122,7 @@ legend("topright", legend = legend_labels, col = color_vector[1:length(lambda_ve
 # Add a title
 title("Theoretical zero-truncated Poisson Distribution")
 ```
-```{r 1.2}
+```{r 1.2.2}
 # create the first straight line plot
 plot(k,poisson_cum[,1], type = "s", lwd = 2, col = color_vector[1], 
      xlab = "k", ylab = "P", lty = linetype[1], ylim=c(0,1))
@@ -185,6 +185,16 @@ title("Distribution of generated random numbers")
 ```{r 2.}
 dmuonenergy <- function(E, N, E0, g){ ifelse(test = E<E0, yes = return(N), no = return(N*(E-E0+1)^(-g))) }
 pmuonenergy <- function(q, N, E0, g){ return(integrate(function (x) {sapply(x, function(E) {dmuonenergy(E, N, E0, g) })}, lower = 0, upper = q)$value) }
+
+
+qmuonenergy <- function(p, N, E0, g){ ifelse(p<N*E0, p/N, ((1-g)*(p/N-E0)+1)^(1/(1-g))+E0-1) }
+
+
+rmuonenergy <- function(n, N, E0, g){ 
+  uniform_sampling <- runif(n, min = 1.e-10, max = 1-1.e-10)
+  return(sapply(uniform_sampling, function(p) qmuonenergy(p, N, E0, g)))
+}
+  
 normalize <- function(E0, g){ pmuonenergy(Inf, 1, E0, g)^-1 }
 ```
 ```{r 2.1}
@@ -200,7 +210,6 @@ print(sprintf("The normalization factor is %.2f", N))
 x_plot <- seq(from=0, to=13, length.out=50)
 y_plot <- sapply(x_plot, function(E){dmuonenergy(E, N, E0, g)})
 
-#plot
 plot(x_plot, y_plot, type='l', lwd = 2, col = color_vector[1], lty = linetype[1], xlab="E [GeV]", ylab="PDF")
 
 
@@ -226,4 +235,155 @@ mean <- integrate(function(x){ sapply(x, function(E){ E * dmuonenergy(E, N, E0, 
 sprintf("The mean value is %.2f", mean)
 ```
 
+```{r 2.5}
+n=106
+generated_energies <- rmuonenergy(n,  N, E0, g)
+hist(generated_energies, xlab="E [GeV]", ylab="PDF", freq = FALSE, breaks = 10, xlim=c(0,13), main='', col = color_vector[5])
 
+#Plotting the pdf
+x_plot <- seq(from=0, to=13, length.out=50)
+y_plot <- sapply(x_plot, function(E){dmuonenergy(E, N, E0, g)})
+
+lines(x_plot, y_plot, type='l', lwd = 2, col = color_vector[1], lty = linetype[1])
+legend_labels <- paste('Expected distribution')
+legend("topright", legend = legend_labels, col = color_vector[1], lty = linetype[1], lwd = 2)
+
+grid()
+title(expression(paste("Generated muon energies pdf [E0" , " = 7.25GeV, ", gamma, " = 2.7]")))
+```
+
+# Exercise 3
+
+* Suppose that the average number of accidents at an intersection is two per day.
+
+  1. Using Markov’s inequality, find a bound for the probability that at least five accidents will occur tomorrow.
+  
+    - Denoting with *N* the number of accidents per day, we are supposing that $E[N] = \mu = 2$. Since $N \ge 0$ by definition, from Markov's inequality the probability that at least five accidents will occur tomorrow is $P(N \ge 5) \le \frac{\mu}{5} = \frac{2}{5}$.
+    
+  2. Using Poisson random variables, calculate the probability that at least five accidents will occur tomorrow. Compare this value with the bound obtained in the previous point a).
+  
+    - Recalling that the Poisson pdf is $f(N; \mu) = \frac{\mu^N e^{-\mu}}{N!}$, $P(N \geq 5) = 1 - P(N \leq 4) = 1 - \sum_{N=0}^{4} f(N; \mu) \approx 1 - 0.947 \approx 5.3\%$ which is way under the upper bound of $40\%$.
+    
+  3. Let the variance of the number of accidents be two per day. Using Chebyshev’s inequality, find a bound on the probability that tomorrow at least five accidents will occur.
+  
+  - Considering $\sigma^2 = 2$, using Chebyshev’s inequality $P(N \ge 5) = P(N-2 \ge 3) = P(N-\mu \ge 3) \le \frac{\sigma^2}{9} = \frac{2}{9}$
+
+# Exercise 4
+
+The waiting period from the time a book is ordered until it is received is a random variable with mean seven days and standard deviation two days. If Helen wants to be 95% sure that she receives a book by certain date, how early should she order the book?
+
+  - Defining as *T* the random variable associated with the waiting period, let's $E[T] = \mu = 7$, $\sigma^2 = 4$ the mean and the variance, the upper bounds defined by Markov and Chebyshev's inequalities are respectively:
+    * $P(T < k) = 1 - P (T \ge k) = 1 - \frac{\mu}{k} \geq \frac{k-7}{k}$;
+    * $P(T < k) = 1 - P (T \ge k) = 1 - P(T-\mu \ge k - \mu) \ge 1 - P(\left | T-\mu \right |\ge k - \mu) \geq 1 - \frac{\sigma^2}{(k-\mu)^2}$ 
+    
+  Plugging in the numbers we obtain the following inequalities:
+  
+   *$P(T < k) \geq 0.95 \rightarrow  \frac{k-7}{k}\geq 0.95$.
+   *$P(T < k) \geq 0.95 \rightarrow  1 - \frac{4}{(k-7)^2} \geq 0.95 \rightarrow (k-7)^2 \geq 80$.
+   
+  In particular, from the second condition, we can extrapolate that to reach the 95% of confidence level, the lower bound to the waiting period is about 16 days.
+  
+# Exercise 5
+
+An ordinary deck of 52 cards is divided randomly into 26 pairs. Using Chebyshev’s inequality, find an upper bound for the probability that, at most, 10 pairs consist of a black and a red card.
+
+```{r 5}
+#let's simulate the experiment
+N <- 10000 #number of simulated events
+deck <- c(replicate(26, 0), replicate(26, 1))
+couples <- replicate(N, 0)
+
+for (ie in 1:N) {
+  deck <- sample(deck, 52)
+    for(ic in seq(1,51, by=2)){
+      if(deck[ic]!=deck[ic+1])
+        couples[ie]=couples[ie]+1
+    }
+}
+
+writeLines(sprintf(
+'
+Simulating %i events:
+  - The mean is %.2f;
+  - The standard deviation is %.2f.
+  
+Using the Chebyshev’s inequality, an upper bound of P(X<11) is: %.2f
+',
+  N, mean(couples), sd(couples), var(couples)/(10-mean(couples))^2
+))
+
+```
+
+# Exercise 6
+
+* In a stationary bus at the departure station, a passenger gets on the bus, on average every 30 seconds.
+
+  1. Compute the probability of getting more than 6 passenger after 2 minutes. Evaluate the probability of having less than 4 passenger after 3 minutes. 
+  
+  2. Simulate the distribution of the arrival time of the third passenger and superimpose the corresponding pdf. 
+  
+  3. Repeat the procedure of the point b) for the difference in arrival time between the fifth and the first passenger.
+  
+```{r 6.1}
+#Observations
+rate <- 1/30. #passengers/second
+
+#The number of passenger is a random value following a Poisson distribution.
+P_more6 <- 1 - ppois(6, lambda = rate*120)
+P_less4 <- ppois(3, lambda = rate*180)
+
+writeLines(sprintf(
+'
+The probability of getting more than 6 passenger after 2 minutes is: %.2f;
+The probability of having less than 4 passenger after 3 minutesis: %.2f. 
+',
+  P_more6, P_less4
+))
+
+```
+
+
+```{r 6.2}
+N <- 10000 #number of simulated events
+
+#let's simulate N times the waiting times between the arrival of three passengers
+three_passengers_dt <- matrix(rexp(3 * N, rate), nrow = N, ncol = 3)
+third_arrival_times <- rowSums(three_passengers_dt)
+
+max_t <- max(third_arrival_times)
+
+x_plot <- seq(from=0, to=max_t*1.1, length.out=100)
+y_plot <- dgamma(x_plot, shape = 3, rate = rate)
+
+
+hist(third_arrival_times, freq = FALSE, col = color_vector[5], xlab = "t [s]", ylab = "Density", main = "Third arrival time", breaks = 20, ylim = c(0, max(y_plot)*1.1))
+lines(x_plot, y_plot, type='l', lwd = 2, col = color_vector[1], lty = linetype[1])
+polygon(x_plot, y_plot, col = adjustcolor(color_vector[1], alpha.f = 0.1))
+
+legend_labels <- paste('Expected Erlang distribution')
+legend("topright", legend = legend_labels, col = color_vector[1], lty = linetype[1], lwd = 2)
+```
+
+```{r 6.3}
+N <- 10000 #number of simulated events
+
+five_passengers_dt  <- matrix(rexp(5 * N, rate), nrow = N, ncol = 5)
+first_arrival_times <- five_passengers_dt[,1]
+fifth_arrival_times <- rowSums(five_passengers_dt)
+
+first_fifth_time <- fifth_arrival_times - first_arrival_times
+
+max_t <- max(first_fifth_time)
+
+#from a theoretical POV, I can just consider the waiting time of the 4th passenger
+x_plot <- seq(from=0, to=max_t*1.1, length.out=100)
+y_plot <- dgamma(x_plot, shape = 4, rate = rate)
+
+
+hist(first_fifth_time, freq = FALSE, col = color_vector[5], xlab = "t [s]", ylab = "Density", main = "Difference between the fifth and the first arrival times", breaks = 20, ylim = c(0, max(y_plot)*1.1))
+lines(x_plot, y_plot, type='l', lwd = 2, col = color_vector[1], lty = linetype[1])
+polygon(x_plot, y_plot, col = adjustcolor(color_vector[1], alpha.f = 0.1))
+
+legend_labels <- paste('Expected Erlang distribution')
+legend("topright", legend = legend_labels, col = color_vector[1], lty = linetype[1], lwd = 2)
+```
