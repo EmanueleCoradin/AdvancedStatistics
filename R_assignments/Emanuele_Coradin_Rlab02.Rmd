@@ -179,7 +179,7 @@ title("Distribution of generated random numbers")
   2. Plot the probability density function in R. 
   3. Plot the cumulative density function in R. 
   4. Compute the mean value using R 
-  5. [Optional] Generate 106 random numbers from this distribution, show them in an histogram and superimpose the pdf (with a line or with a sufficient number of points).
+  5. [Optional] Generate $10^6$ random numbers from this distribution, show them in an histogram and superimpose the pdf (with a line or with a sufficient number of points).
   
   
 ```{r 2.}
@@ -236,9 +236,9 @@ sprintf("The mean value is %.2f", mean)
 ```
 
 ```{r 2.5}
-n=106
+n=1e06
 generated_energies <- rmuonenergy(n,  N, E0, g)
-hist(generated_energies, xlab="E [GeV]", ylab="PDF", freq = FALSE, breaks = 10, xlim=c(0,13), main='', col = color_vector[5])
+hist(generated_energies, xlab="E [GeV]", ylab="PDF", freq = FALSE, breaks = c(seq(0,14, by=0.2), 15, max(generated_energies)), xlim=c(0,13), main='', col = color_vector[5])
 
 #Plotting the pdf
 x_plot <- seq(from=0, to=13, length.out=50)
