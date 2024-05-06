@@ -52,7 +52,25 @@ The number of particles emitted by a radioactive source during a fixed interval 
 
 ```{r 1.}
 observed_particles <- c(4, 1, 3, 1, 5, 3)
+particles_mean <- observed_particles %>% mean
+particles_std  <- observed_particles %>% sd
 
+writeLines(sprintf(
+  'The observed number of particles in a fixed time interval of 10s is on average %.1f, with a standard deviation of %.1f',
+  particles_mean, particles_std
+))
+(expression('Given this observations, as a first approach I assume a uniform prior for ', mu, ' from 0 to 7'))
+
+mu_lim <- c(0, 7)
+p_mu <- (mu_lim[2]-mu_lim[1])^(-1)
+mu_list <- seq(mu_lim[1], mu_lim[2], by=0.1)
+
+uniform_prior <- function(mu) p_mu
+likelihood <- function(mu, data) {sum(sapply(data, function(x) dpois(x, mu)))}
+posterior  <- function(mu, data, prior, likelihood) likelihood(mu, data) * prior(mu)
+
+uniform_posterior <- sapply(mu_list, function(mu) posterior(mu, observed_particles, uniform_prior, likelihood))
+plot(x = mu_list, y=uniform_posterior)
 ```
 
 # Exercise 2: Efficiency using Bayesian approach 
