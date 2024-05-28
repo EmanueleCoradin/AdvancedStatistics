@@ -1,0 +1,166 @@
+---
+title: "Assignment 5"
+author: "Emanuele Coradin"
+date: "2024-06-03"
+output: 
+  read_document: rmdformats::readthedown
+  html_document:
+    number_sections: true
+    theme: spacelab
+  pdf_document:
+    number_sections: true
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+color_vector <- c("#CC0000",   # Dark red
+                  "#CC79A7",   # Muted purple
+                  "#D55E00",   # Vermilion
+                  "#009E73",   # Bluish green
+                  "#56B4E9",   # Sky blue
+                  '#000046',   # Deep Blue
+                  "#DB1E60",   # Pinkish-red
+                  "#E69F00")   # Yellow-orange
+
+```
+
+```{r, message=FALSE, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(reshape2)
+library(latex2exp)
+```
+
+```{r }
+#------------- Useful functions -------------
+mean_pdf   <- function(f, lower, upper){integrate(function(x) x*f(x), lower, upper)$value}
+std_pdf <- function(f, lower, upper) {
+  mu <- mean_pdf(f, lower, upper)
+  sqrt(integrate(function(x) (x - mu)^2 * f(x), lower, upper)$value / integrate(f, lower, upper)$value)
+}
+cumulative <- function(f, lower, X){integrate(f, lower, X,stop.on.error = FALSE)$value}
+inverse_cumulative <- function(f, p, lower, upper){uniroot(function(x) cumulative(f, lower, x)-p, c(lower, upper))$root}
+
+#inference functions
+binom_likelihood <- function(prob, ...) sapply(prob, function(P)  prod(dbinom(prob=P, ...)))
+pois_likelihood  <- function(mu, ...)   sapply(mu,   function(MU) prod(dpois (lambda = MU, ...)))
+norm_likelihood  <- function(mu, ...)   sapply(mu,   function(MU) prod(dnorm (mean = MU, ...) ))
+
+posterior <- function(parameter, prior, likelihood, lower, upper, ...) {
+  unnormalized <- function(x) likelihood(x, ...)*prior(x)
+  norm_factor  <- integrate(unnormalized, lower = lower, upper = upper)$value
+  unnormalized(parameter)/norm_factor
+}
+
+```
+
+# Exercise 1: Markov Chain using Metropolis-Hastings
+
+## Scenario
+
+Given the following un-normalized posterior distribution $g(\theta | x) \propto \frac{1}{2} \exp \left( -\frac{(\theta + 3)^2}{2} \right) + \frac{1}{2} \exp \left( -\frac{(\theta - 3)^2}{2} \right)$:
+
+    - Draw a Markov Chain from the posterior distribution using a Metropolis-Hastings algorithm 
+    
+    - Use a Norm (0, 1) as random-walk candidate density 
+    
+    - Plot the sampled distribution 
+    
+    - Analyze the chain with the CODA package and plot the chain autocorrelation 
+    
+    - Try to use different burn-in cycles and thinning and plot the corresponding posterior distribution and the chain autocorrelation function. What are the best parameters ?
+    
+## Answers
+
+```{r 1}
+
+```
+
+# Exercise 2
+
+## Scenario
+
+A set of measured data should follow, according to the physics model applied to them, a linear behavior. 
+Data are the following: Y = { -7.821 -1.494 -15.444 -10.807 -13.735 -14.442 -15.892 -18.326 } X = { 5 6 7 8 9 10 11 12 }
+
+Tasks:
+
+    - Perform a simple linear regression model running a Markov Chain Monte Carlo with JAGS, assuming that data follow the model: Z[i] = a + b * X[i]; and the likelihood of the measured data follow a Gaussian likelihood distribution: Y[i] ~dnorm(Z[i], c) (you can constrain the parameter a, b and c to the following intervals: a ∈ [1, 10], b ∈ [−1, 3] and c ∈ [0.034, 4]) 
+  
+    - Run JAGS experimenting with the burn-in and number of iterations of the chain. Plot the evolution of the chains and the posterior distributions of a and b. Compute the 95% credibility interval for the parameters. 
+  
+    - Using the obtained posterior distributions, compute the posterior distribution of $\sigma = \sqrt{(\frac{1}{c})}$.
+  
+## Answers
+
+```{r 2}
+
+```
+
+# Exercise 3
+
+## Scenario
+
+Suppose we observe the following values x = 2.06, 5.56, 7.93, 6.56, 205 and we assume that the data come from a Gaussian distribution with unknown mean m and variance s2 
+
+    - Build a simple JAGS model and run a Markov Chain Monte Carlo to obtain the posterior distribution of the mean and variance.
+    
+    - Assume uniform prior distributions for the parameters, m ~dunif(-10, 10) and s ~dunif(0,50).
+    
+    - Compute also the posterior distribution for m/s.
+
+## Answers
+
+```{r 3}
+
+```
+
+# Exercise 4
+
+## Scenario
+
+The data set that Edwin Hubble used to show that galaxies are moving either away or towards us are given in the following table:
+  
+  | D [parsec] | V [km/s]|
+  |------------|---------|
+  |   0.0032   |   170   |
+  |   0.0034   |   290   |
+  |   0.2140   |   -130  |
+  |   0.2630   |   -70   |
+  |   0.2750   |   -185  |
+  |------------|---------|
+  |   0.2750   |   -220  |
+  |   0.4500   |   200   |
+  |   0.5000   |   290   |
+  |   0.5000   |   270   |
+  |   0.6300   |   200   |
+  |------------|---------|
+  |   0.8000   |   920   |
+  |   0.9000   |   450   |
+  |   0.9000   |   500   |
+  |   0.9000   |   500   |
+  |   0.9000   |   960   |
+  |------------|---------|
+  |   2.0000   |   500   |
+  |   2.0000   |   850   |
+  |   2.0000   |   800   |
+  |   2.0000   |   1090  |
+    
+
+Using this data set define a JAGS model to fit data with the following:
+    
+    - V[i] ~dnorm(b * D[i], c), where V represent the velocity in units of km/s, D is the observed distance (in units of parsec), and b and c are two parameters of the model 
+    
+    - Assume whatever prior distribution you think is appropriate plot the evolution of the chains, the posterior distribution of the parameters and the 95% credibility interval
+
+
+## Answers
+
+```{r 4}
+
+```
+
+
