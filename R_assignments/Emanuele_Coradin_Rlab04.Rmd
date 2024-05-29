@@ -3,14 +3,14 @@ title: "Assignment 4"
 author: "Emanuele Coradin"
 date: "2024-05-20"
 output: 
-  read_document: rmdformats::readthedown
-  html_document:
-    number_sections: true
-    theme: spacelab
   pdf_document:
     number_sections: true
     toc: true
     toc_depth: 2
+  read_document: rmdformats::readthedown
+  html_document:
+    number_sections: true
+    theme: spacelab
 ---
 
 ```{r setup, include=FALSE}
@@ -65,25 +65,25 @@ A well established and diffused method for detecting a disease in blood fails to
 
 A young UniPD startUp has developed an innovative method of screening. During the qualification phase, a random sample of n = 75 patients known to have the disease is screened using the new method.
 
-    (a) what is the probability distribution of y, the number of times the new method fails to detect the disease ?
-  
-    (b) on the n = 75 patients sample, the new method fails to detect the disease in y = 6 cases. What is the frequentist estimator of the failure probability of the new method ? 
-  
-    (c) setup a bayesian computation of the posterior probability, assuming a beta distribution with mean value 0.15 and standard deviation 0.14. Plot the posterior distribution for y, and mark on the plot the mean value and variance 
-  
-    (d) Perform a test of hypothesis assuming that if the probability of failing to the detect the desease in ill patients is greater or equal than 15%, the new test is no better that the traditional method. Test the sample at a 5% level of significance in the Bayesian way. 
+(a) what is the probability distribution of y, the number of times the new method fails to detect the disease ?
+
+(b) on the n = 75 patients sample, the new method fails to detect the disease in y = 6 cases. What is the frequentist estimator of the failure probability of the new method ? 
+
+(c) setup a bayesian computation of the posterior probability, assuming a beta distribution with mean value 0.15 and standard deviation 0.14. Plot the posterior distribution for y, and mark on the plot the mean value and variance 
+
+(d) Perform a test of hypothesis assuming that if the probability of failing to the detect the desease in ill patients is greater or equal than 15%, the new test is no better that the traditional method. Test the sample at a 5% level of significance in the Bayesian way. 
     
-    (e) Perform the same hypothesis test in the classical frequentist way.
+(e) Perform the same hypothesis test in the classical frequentist way.
 
 ## Answers
 
-    (a) y follows a binomial distribution $P_n{(y)}$ with n being the number of patients and p the probability of failing the detection. 
-    
-    (b) Since $\mathbb{E}{[y]} = p*n$, the frequentist estimator is $p=\frac{6}{75} = 0.08$.
-  
-    (c) The parameters for the beta prior are $\alpha \approx 0.83$ and $\beta \approx 4.68$. Since the beta distribution is the conjugate prior for the binomial likelihood, the parameters of the beta posterior are: $\alpha^{\prime} = \alpha + y = 6.83$ and $\beta^{\prime} = \beta + n - y = 73.68$.
-  
-    (d) Looking at the plot we can accept at a 5% level of significance that the new method is better than the old one.
+(a) y follows a binomial distribution $P_n{(y)}$ with n being the number of patients and p the probability of failing the detection. 
+
+(b) Since $\mathbb{E}{[y]} = p*n$, the frequentist estimator is $p=\frac{6}{75} = 0.08$.
+
+(c) The parameters for the beta prior are $\alpha \approx 0.83$ and $\beta \approx 4.68$. Since the beta distribution is the conjugate prior for the binomial likelihood, the parameters of the beta posterior are: $\alpha^{\prime} = \alpha + y = 6.83$ and $\beta^{\prime} = \beta + n - y = 73.68$.
+
+(d) Looking at the plot we can accept at a 5% level of significance that the new method is better than the old one.
   
 ```{r 1}
 #------------- SETTING THE INPUT HYPOTESIS -------------
@@ -110,7 +110,7 @@ beta_95_interval <- sapply(c(0., 0.95), function(P) inverse_cumulative(beta_post
 
 #------------------ PLOTTING ------------------------
 
-curve(beta_posterior, from = 0, to = 1, xlab = TeX('$p_{fail}$'), ylab = 'Posterior', col=color_vector[1], main='P', lwd=2, n = 500, xlim=c(0,0.3)) 
+curve(beta_posterior, from = 0, to = 1, xlab = TeX('$p_{fail}$'), ylab = 'Posterior', col=color_vector[1], main='Inference on the probability of failing', lwd=2, n = 500, xlim=c(0,0.3)) 
  
 x_plot <- seq(from=beta_95_interval[1], to=beta_95_interval[2], length.out=500)
 y_plot <- c(0, beta_posterior(x_plot), 0)
@@ -123,7 +123,7 @@ abline(v=mean_beta_posterior, col = color_vector[7], lwd=2, lty='longdash')
 abline(v=mean_beta_posterior - std_beta_posterior, col = color_vector[6], lwd=2, lty='dashed')
 abline(v=mean_beta_posterior + std_beta_posterior, col = color_vector[6], lwd=2, lty='dashed')
 
-legend("topright", legend = c("Beta Posterior", "Mean", "±σ"), col = c(color_vector[1], color_vector[7], color_vector[6]), lty = c('solid', 'longdash', 'dashed'))
+legend("topright", legend = c("Beta Posterior", "Mean", "±std"), col = c(color_vector[1], color_vector[7], color_vector[6]), lty = c('solid', 'longdash', 'dashed'))
 
 legend("right", legend="95%% credibility interval", fill=color_vector[5])
 
@@ -139,7 +139,7 @@ writeLines(
   )
 )
 ```
-    (e) In the frequentist approach, we can use a binomial test. Looking at the results, with this approach it is not possible to reject the hypotesis that the new method is worse than the previous one at a 5% level of significance, since the 95% confidence interval includes p = 15%.
+(e) In the frequentist approach, we can use a binomial test. Looking at the results, with this approach it is not possible to reject the hypothesis that the new method is worse than the previous one at a 5% level of significance, since the 95% confidence interval includes p = 15%.
 
 ```{r 1.e}
 binom.test(fails, N, p = 0.15, alternative = "less")
@@ -159,10 +159,10 @@ $g(\mu) = \begin{cases} 1, & \quad 0 < \mu \leq 3 \\ 3, & \quad 3 < \mu \leq 5 \
 
 Tasks:
 
-    (a) Find the posterior distribution, posterior mean, and standard deviation.
-    (b) Find the 95% credibility interval for $\mu$.
-    (c) Plot the posterior distribution, indicating the mean value, standard deviation, and 95% credibility interval.
-    (d) Plot the prior, likelihood, and posterior distribution on the same graph.
+  (a) Find the posterior distribution, posterior mean, and standard deviation.
+  (b) Find the 95% credibility interval for $\mu$.
+  (c) Plot the posterior distribution, indicating the mean value, standard deviation, and 95% credibility interval.
+  (d) Plot the prior, likelihood, and posterior distribution on the same graph.
 
 ## Answers
 
@@ -190,7 +190,7 @@ cred_95_interval <- sapply(c(0.025, 0.975), function(P) inverse_cumulative(poste
 
 #------------------ PLOTTING ------------------------
 
-curve(posterior_values, from = 0, to = 8, xlab = expression(mu), ylab = 'Posterior', col=color_vector[1], main='P', lwd=2, n = 500, xlim=c(0,8)) 
+curve(posterior_values, from = 0, to = 8, xlab = expression(mu), ylab = 'Posterior', col=color_vector[1], main='Inference on the Gaussian Mean', lwd=2, n = 500, xlim=c(0,8)) 
  
 x_plot <- seq(from=cred_95_interval[1], to=cred_95_interval[2], length.out=500)
 y_plot <- c(0, posterior_values(x_plot), 0)
@@ -203,9 +203,9 @@ abline(v=mean_posterior, col = color_vector[7], lwd=2, lty='longdash')
 abline(v=mean_posterior - std_posterior, col = color_vector[6], lwd=2, lty='dashed')
 abline(v=mean_posterior + std_posterior, col = color_vector[6], lwd=2, lty='dashed')
 
-legend("topright", legend = c("Posterior", "Mean", "±σ"), col = c(color_vector[1], color_vector[7], color_vector[6]), lty = c('solid', 'longdash', 'dashed'))
+legend("topright", legend = c("Posterior", "Mean", "±std"), col = c(color_vector[1], color_vector[7], color_vector[6]), lty = c('solid', 'longdash', 'dashed'))
 
-legend("right", legend="95%% credibility interval", fill=color_vector[5])
+legend("topleft", legend="95%% credibility interval", fill=color_vector[5])
 
 # --------------------- WRITE OUTPUT ----------------------
 
@@ -244,13 +244,13 @@ legend("topright", legend="95%% credibility interval", fill=color_vector[5])
 
 Write a program in R that: 
 
-    1) selects a random box 
-  
-    2) makes random sampling from the box 
-    
-    3) prints on the standard output the probability of selecting each box 
-  
-    4) plots the probability for each box as a function of the number of trial
+1) selects a random box 
+
+2) makes random sampling from the box 
+
+3) prints on the standard output the probability of selecting each box 
+
+4) plots the probability for each box as a function of the number of trial
 
 ```{r 3, message=FALSE}
 # building the boxes, s.t. the box i contains i white balls (=1)
@@ -265,7 +265,6 @@ box_seq  <- 1:N_extracted_box
 
 # Select the boxes
 box_sampling <- sample(1:7, N_extracted_box, replace=TRUE)
-print(box_sampling)
 
 # Coding the process of selecting some balls
 ball_sampling <- lapply(box_sampling, function(i) sample(box[[i]], N_ball, replace=TRUE))
@@ -296,10 +295,11 @@ line_types <- 1:N_box
 plot(posterior_matrix[1, ], type = 'o', pch = 20, col = colors[1],
      ylim = range(posterior_matrix), xlab = "Number of sampled balls", ylab = "Posterior Probability", main = "Evolution of the posterior along the samples", lwd=2)
 
-sapply(2:N_box, function(ibox) lines(posterior_matrix[ibox, ], type = 'o', pch = 20, col = colors[ibox], lty = line_types[ibox], lwd=2))
+void <- sapply(2:N_box, function(ibox) lines(posterior_matrix[ibox, ], type = 'o', pch = 20, col = colors[ibox], lty = line_types[ibox], lwd=2))
     
 grid()
 
 legend("topright", legend = paste("Box", 0:(N_box-1)), col = colors, lty = line_types, pch = 20, lwd=2)
+
 ```
 
