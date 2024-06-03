@@ -1,0 +1,1031 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Assignment 5},
+  pdfauthor={Emanuele Coradin},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Assignment 5}
+\author{Emanuele Coradin}
+\date{2024-06-03}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} Useful functions {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{mean\_pdf   }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(f, lower, upper)\{}\FunctionTok{integrate}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(x) x}\SpecialCharTok{*}\FunctionTok{f}\NormalTok{(x), lower, upper,}\AttributeTok{stop.on.error =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{value\}}
+\NormalTok{std\_pdf }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(f, lower, upper) \{}
+\NormalTok{  mu }\OtherTok{\textless{}{-}} \FunctionTok{mean\_pdf}\NormalTok{(f, lower, upper)}
+  \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{integrate}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(x) (x }\SpecialCharTok{{-}}\NormalTok{ mu)}\SpecialCharTok{\^{}}\DecValTok{2} \SpecialCharTok{*} \FunctionTok{f}\NormalTok{(x), lower, upper, }\AttributeTok{stop.on.error =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{value }\SpecialCharTok{/} \FunctionTok{integrate}\NormalTok{(f, lower, upper, }\AttributeTok{stop.on.error =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{value)}
+\NormalTok{\}}
+\NormalTok{cumulative }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(f, lower, X)\{}\FunctionTok{integrate}\NormalTok{(f, lower, X,}\AttributeTok{stop.on.error =} \ConstantTok{FALSE}\NormalTok{)}\SpecialCharTok{$}\NormalTok{value\}}
+\NormalTok{inverse\_cumulative }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(f, p, lower, upper)\{}\FunctionTok{uniroot}\NormalTok{(}\ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{cumulative}\NormalTok{(f, lower, x)}\SpecialCharTok{{-}}\NormalTok{p, }\FunctionTok{c}\NormalTok{(lower, upper))}\SpecialCharTok{$}\NormalTok{root\}}
+
+\CommentTok{\#inference functions}
+\NormalTok{binom\_likelihood }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(prob, ...) }\FunctionTok{sapply}\NormalTok{(prob, }\ControlFlowTok{function}\NormalTok{(P)  }\FunctionTok{prod}\NormalTok{(}\FunctionTok{dbinom}\NormalTok{(}\AttributeTok{prob=}\NormalTok{P, ...)))}
+\NormalTok{pois\_likelihood  }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(mu, ...)   }\FunctionTok{sapply}\NormalTok{(mu,   }\ControlFlowTok{function}\NormalTok{(MU) }\FunctionTok{prod}\NormalTok{(}\FunctionTok{dpois}\NormalTok{ (}\AttributeTok{lambda =}\NormalTok{ MU, ...)))}
+\NormalTok{norm\_likelihood  }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(mu, ...)   }\FunctionTok{sapply}\NormalTok{(mu,   }\ControlFlowTok{function}\NormalTok{(MU) }\FunctionTok{prod}\NormalTok{(}\FunctionTok{dnorm}\NormalTok{ (}\AttributeTok{mean =}\NormalTok{ MU, ...) ))}
+
+\NormalTok{posterior }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(parameter, prior, likelihood, lower, upper, ...) \{}
+\NormalTok{  unnormalized }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x) }\FunctionTok{likelihood}\NormalTok{(x, ...)}\SpecialCharTok{*}\FunctionTok{prior}\NormalTok{(x)}
+\NormalTok{  norm\_factor  }\OtherTok{\textless{}{-}} \FunctionTok{integrate}\NormalTok{(unnormalized, }\AttributeTok{lower =}\NormalTok{ lower, }\AttributeTok{upper =}\NormalTok{ upper)}\SpecialCharTok{$}\NormalTok{value}
+  \FunctionTok{unnormalized}\NormalTok{(parameter)}\SpecialCharTok{/}\NormalTok{norm\_factor}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{exercise-1-markov-chain-using-metropolis-hastings}{%
+\section{Exercise 1: Markov Chain using
+Metropolis-Hastings}\label{exercise-1-markov-chain-using-metropolis-hastings}}
+
+\hypertarget{scenario}{%
+\subsection{Scenario}\label{scenario}}
+
+Given the following un-normalized posterior distribution
+\(g(\theta | x) \propto \frac{1}{2} \exp \left( -\frac{(\theta + 3)^2}{2} \right) + \frac{1}{2} \exp \left( -\frac{(\theta - 3)^2}{2} \right)\):
+
+\begin{itemize}
+\item
+  Draw a Markov Chain from the posterior distribution using a
+  Metropolis-Hastings algorithm
+\item
+  Use a Norm (0, 1) as random-walk candidate density
+\item
+  Plot the sampled distribution
+\item
+  Analyze the chain with the CODA package and plot the chain
+  autocorrelation
+\item
+  Try to use different burn-in cycles and thinning and plot the
+  corresponding posterior distribution and the chain autocorrelation
+  function. What are the best parameters ?
+\end{itemize}
+
+\hypertarget{answers}{%
+\subsection{Answers}\label{answers}}
+
+\hypertarget{algorithm}{%
+\subsubsection{Algorithm}\label{algorithm}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Initialize the chain at some value \(\theta_0\).
+\item
+  Draw a random sample \(s\) from the distribution
+  \(Q(s \mid \theta_t)\). This is often a multivariate Gaussian where
+  \(\theta_t\) is the mean, and the covariance matrix specifies the
+  typical size of steps in the chain in each dimension of the parameters
+  \(\theta\).
+\item
+  Decide whether to accept or not the new candidate sample on the basis
+  of the Metropolis ratio: \[
+  \rho = \frac{f(s) Q(\theta_t \mid s)}{f(\theta_t) Q(s \mid \theta_t)}
+  \]
+
+  \begin{itemize}
+  \tightlist
+  \item
+    If \(\rho \geq 1\), the new candidate is accepted and
+    \(\theta_{t+1} = s\).
+  \item
+    If \(\rho < 1\), we only accept it with probability \(\rho\):
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Draw \(u \sim U(0, 1)\) and set \(\theta_{t+1} = s\) only if
+      \(u \leq \rho\).
+    \item
+      If \(s\) is not accepted, we set \(\theta_{t+1} = \theta_t\),
+      i.e., the existing sample in the chain is repeated.
+    \end{itemize}
+  \end{itemize}
+\end{enumerate}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\#{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-} FUNCTION DEFINITIONS {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\CommentTok{\# function to generate the next point in the random walk}
+\NormalTok{std }\OtherTok{\textless{}{-}} \DecValTok{1}
+\NormalTok{Q\_gen }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(theta\_t) }\FunctionTok{rnorm}\NormalTok{(}\DecValTok{1}\NormalTok{, theta\_t, std)}
+\NormalTok{Q     }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(x, theta\_t) }\FunctionTok{dnorm}\NormalTok{(x, theta\_t, std)}
+
+\CommentTok{\# unnormalized posterior}
+\NormalTok{g }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(theta) }\FloatTok{0.5} \SpecialCharTok{*} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.5} \SpecialCharTok{*}\NormalTok{ (theta }\SpecialCharTok{+} \DecValTok{3}\NormalTok{)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FloatTok{0.5} \SpecialCharTok{*} \FunctionTok{exp}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{0.5} \SpecialCharTok{*}\NormalTok{ (theta }\SpecialCharTok{{-}} \DecValTok{3}\NormalTok{)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+
+\NormalTok{generate }\OtherTok{\textless{}{-}} 
+    \ControlFlowTok{function}\NormalTok{(theta\_t)\{}
+\NormalTok{      s }\OtherTok{\textless{}{-}} \FunctionTok{Q\_gen}\NormalTok{(theta\_t)}
+\NormalTok{      rho }\OtherTok{\textless{}{-}} \FunctionTok{g}\NormalTok{(s)}\SpecialCharTok{*}\FunctionTok{Q}\NormalTok{(theta\_t, s)}\SpecialCharTok{/}\NormalTok{(}\FunctionTok{g}\NormalTok{(theta\_t)}\SpecialCharTok{*}\FunctionTok{Q}\NormalTok{(s, theta\_t))}
+      \FunctionTok{ifelse}\NormalTok{ (rho}\SpecialCharTok{\textless{}}\DecValTok{1}\NormalTok{, \{ u }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{); }\FunctionTok{ifelse}\NormalTok{(u }\SpecialCharTok{\textless{}=}\NormalTok{ rho, s, theta\_t)\}, s)}
+\NormalTok{    \}}
+
+\NormalTok{Metropolis\_Hastings }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(N, theta\_0, }\AttributeTok{burnin =} \DecValTok{0}\NormalTok{, }\AttributeTok{thinning =} \DecValTok{1}\NormalTok{)\{}
+\NormalTok{  chain }\OtherTok{\textless{}{-}} \FunctionTok{vector}\NormalTok{(}\AttributeTok{length =}\NormalTok{ N)}
+\NormalTok{  theta\_t }\OtherTok{\textless{}{-}}\NormalTok{ theta\_0}
+  
+  \CommentTok{\# burn{-}in phase}
+  \ControlFlowTok{for}\NormalTok{ (ib }\ControlFlowTok{in} \DecValTok{0}\SpecialCharTok{:}\NormalTok{burnin) \{}
+\NormalTok{      theta\_t }\OtherTok{\textless{}{-}} \FunctionTok{generate}\NormalTok{(theta\_t)}
+\NormalTok{  \}}
+  
+  \CommentTok{\# save phase}
+  \ControlFlowTok{for}\NormalTok{(step }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{N)\{}
+    \CommentTok{\#thinning}
+    \ControlFlowTok{for}\NormalTok{(it }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{thinning)\{}
+\NormalTok{      theta\_t }\OtherTok{\textless{}{-}} \FunctionTok{generate}\NormalTok{(theta\_t)}
+\NormalTok{    \}}
+    \CommentTok{\#append in the chain}
+\NormalTok{    chain[step] }\OtherTok{\textless{}{-}}\NormalTok{ theta\_t}
+\NormalTok{  \}}
+  
+  \FunctionTok{return}\NormalTok{(chain)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{itemize}
+\item
+  Draw a Markov Chain from the posterior distribution using a
+  Metropolis-Hastings algorithm
+\item
+  Use a Norm (0, 1) as random-walk candidate density
+\item
+  Plot the sampled distribution
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{N }\OtherTok{\textless{}{-}} \DecValTok{100000}
+\NormalTok{theta\_0 }\OtherTok{\textless{}{-}} \DecValTok{0}
+
+\NormalTok{chain }\OtherTok{\textless{}{-}} \FunctionTok{Metropolis\_Hastings}\NormalTok{(N, theta\_0)}
+
+\NormalTok{df }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{chain =}\NormalTok{ chain)}
+
+\NormalTok{plt }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(df, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ chain, }\AttributeTok{y=}\FunctionTok{after\_stat}\NormalTok{(density))) }\SpecialCharTok{+}
+  \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{bins =} \DecValTok{50}\NormalTok{, }\AttributeTok{fill=}\NormalTok{color\_vector[}\DecValTok{5}\NormalTok{], }\AttributeTok{alpha =} \FloatTok{1.}\NormalTok{, }\AttributeTok{color=}\StringTok{\textquotesingle{}black\textquotesingle{}}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_density}\NormalTok{(}\AttributeTok{color =}\NormalTok{ color\_vector[}\DecValTok{7}\NormalTok{], }\AttributeTok{size =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{title =} \StringTok{"Histogram and Density of Metropolis{-}Hastings Chain"}\NormalTok{, }\AttributeTok{x =} \FunctionTok{expression}\NormalTok{(theta), }\AttributeTok{y =} \StringTok{"Posterior"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## i Please use `linewidth` instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Display the plot}
+\FunctionTok{print}\NormalTok{(plt)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/1.1 - 1.3-1.pdf}
+
+\begin{itemize}
+\item
+  Analyze the chain with the CODA package and plot the chain
+  autocorrelation
+\item
+  Try to use different burn-in cycles and thinning and plot the
+  corresponding posterior distribution and the chain autocorrelation
+  function. What are the best parameters ?
+\end{itemize}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Convert the chain to an mcmc object}
+\NormalTok{mcmc\_chain }\OtherTok{\textless{}{-}} \FunctionTok{mcmc}\NormalTok{(chain)}
+
+\NormalTok{lags }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{500}\NormalTok{, }\DecValTok{10}\NormalTok{)}
+\NormalTok{autocorr\_chain }\OtherTok{\textless{}{-}} \FunctionTok{autocorr}\NormalTok{(mcmc\_chain, }\AttributeTok{lags =}\NormalTok{ lags)}
+
+\FunctionTok{plot}\NormalTok{(lags, autocorr\_chain, }\AttributeTok{type =} \StringTok{\textquotesingle{}s\textquotesingle{}}\NormalTok{, }\AttributeTok{col=}\NormalTok{color\_vector[}\DecValTok{7}\NormalTok{], }\AttributeTok{lty=}\DecValTok{1}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{main =} \StringTok{\textquotesingle{}Autocorrelation of the chain\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{\textquotesingle{}lags\textquotesingle{}}\NormalTok{, }\AttributeTok{ylab=}\StringTok{\textquotesingle{}autocorrelation\textquotesingle{}}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/1.4-1.pdf}
+
+\begin{verbatim}
+
+#{r 1.5}
+
+burnin_list   <- list(100, 1000, 10000)
+thinning_list <- list(5, 10, 50)
+
+chain_list <- unlist(lapply(burnin_list, function(burnin) lapply(thinning_list, function(thinning) Metropolis_Hastings(N, theta_0, burnin, thinning))), recursive=FALSE)
+
+# Save the chain_list to a file
+SaveRDS(chain_list, 'chain_list_RDS.RData')
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{burnin\_list   }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\DecValTok{100}\NormalTok{, }\DecValTok{1000}\NormalTok{, }\DecValTok{10000}\NormalTok{)}
+\NormalTok{thinning\_list }\OtherTok{\textless{}{-}} \FunctionTok{list}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{50}\NormalTok{)}
+
+\CommentTok{\# Retrieve the precomputed chains}
+\NormalTok{chain\_list\_RDS }\OtherTok{\textless{}{-}} \FunctionTok{readRDS}\NormalTok{(}\StringTok{"chain\_list\_RDS.RData"}\NormalTok{)}
+
+\CommentTok{\# Plot the autocorrelation}
+
+\NormalTok{mcmc\_chain\_list }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(chain\_list\_RDS,  mcmc)}
+\NormalTok{N\_chains }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(mcmc\_chain\_list)}
+  
+\NormalTok{lags }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{150}\NormalTok{, }\DecValTok{5}\NormalTok{)}
+\NormalTok{autocorr\_chain\_list }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(mcmc\_chain\_list, }\ControlFlowTok{function}\NormalTok{(mcmc\_chain) }\FunctionTok{log}\NormalTok{(}\FunctionTok{abs}\NormalTok{(}\FunctionTok{autocorr}\NormalTok{(mcmc\_chain, }\AttributeTok{lags =}\NormalTok{ lags))))}
+
+\NormalTok{ylim}\OtherTok{=}\FunctionTok{c}\NormalTok{(}\FunctionTok{min}\NormalTok{(}\FunctionTok{unlist}\NormalTok{(autocorr\_chain\_list)), }\FunctionTok{max}\NormalTok{(}\FunctionTok{unlist}\NormalTok{(autocorr\_chain\_list))}\SpecialCharTok{*}\FloatTok{1.1}\NormalTok{)}
+
+\NormalTok{vanilla\_mcmc }\OtherTok{\textless{}{-}} \FunctionTok{log}\NormalTok{(}\FunctionTok{abs}\NormalTok{(}\FunctionTok{autocorr}\NormalTok{(mcmc\_chain, }\AttributeTok{lags =}\NormalTok{ lags)))}
+
+\NormalTok{colormap }\OtherTok{\textless{}{-}} \FunctionTok{rainbow}\NormalTok{(N\_chains)}
+
+\NormalTok{labels }\OtherTok{\textless{}{-}} \FunctionTok{unlist}\NormalTok{(}\FunctionTok{lapply}\NormalTok{(burnin\_list, }\ControlFlowTok{function}\NormalTok{(burnin) }
+                 \FunctionTok{lapply}\NormalTok{(thinning\_list, }\ControlFlowTok{function}\NormalTok{(thinning) }
+                 \FunctionTok{paste}\NormalTok{(}\StringTok{"B ="}\NormalTok{, burnin, }\StringTok{", T ="}\NormalTok{, thinning))))}
+
+\FunctionTok{plot}\NormalTok{(lags, vanilla\_mcmc, }\AttributeTok{type =} \StringTok{\textquotesingle{}s\textquotesingle{}}\NormalTok{, }\AttributeTok{col=}\NormalTok{color\_vector[}\DecValTok{7}\NormalTok{], }\AttributeTok{lty=}\DecValTok{1}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{main =} \StringTok{\textquotesingle{}Autocorrelation of the chains\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{\textquotesingle{}lags\textquotesingle{}}\NormalTok{, }\AttributeTok{ylab=}\StringTok{\textquotesingle{}log(|autocorrelation|)\textquotesingle{}}\NormalTok{, }\AttributeTok{xlim =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{205}\NormalTok{), }\AttributeTok{ylim =}\NormalTok{ ylim)}
+
+\NormalTok{void }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\NormalTok{N\_chains, }\ControlFlowTok{function}\NormalTok{(iline) }\FunctionTok{lines}\NormalTok{(lags, autocorr\_chain\_list[[iline]], }\AttributeTok{type =} \StringTok{\textquotesingle{}s\textquotesingle{}}\NormalTok{, }\AttributeTok{col=}\NormalTok{colormap[iline], }\AttributeTok{lty=}\NormalTok{iline, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{))}
+
+\CommentTok{\# Place the legend outside the plot area, using multiple columns}
+\FunctionTok{legend}\NormalTok{(}\StringTok{\textquotesingle{}topright\textquotesingle{}}\NormalTok{, }\AttributeTok{legend =}\NormalTok{ labels, }\AttributeTok{col =}\NormalTok{ colormap, }\AttributeTok{lty =} \DecValTok{1}\SpecialCharTok{:}\NormalTok{N\_chains, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{, }\AttributeTok{cex =} \FloatTok{0.8}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/1.5 plots-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Plot the posterior}
+\NormalTok{plot\_posterior }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(chain, color)\{}
+  \FunctionTok{hist}\NormalTok{(chain, }\AttributeTok{breaks =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\ConstantTok{Inf}\NormalTok{, posterior\_breaks, }\ConstantTok{Inf}\NormalTok{), }\AttributeTok{freq =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{col =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{border =}\NormalTok{ color, }\AttributeTok{add=}\ConstantTok{TRUE}\NormalTok{, }\AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(theta), }\AttributeTok{ylab =} \StringTok{\textquotesingle{}density\textquotesingle{}}\NormalTok{, }\AttributeTok{main =} \StringTok{\textquotesingle{}Histogram of the posteriors from different chains\textquotesingle{}}\NormalTok{)}
+\NormalTok{\}}
+
+\NormalTok{posterior\_breaks }\OtherTok{\textless{}{-}} \FunctionTok{hist}\NormalTok{(}\AttributeTok{x=}\NormalTok{chain, }\AttributeTok{breaks =} \DecValTok{50}\NormalTok{, }\AttributeTok{freq =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{col =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{border =}\NormalTok{ color\_vector[}\DecValTok{7}\NormalTok{], }\AttributeTok{xlim =} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{7}\NormalTok{, }\DecValTok{10}\NormalTok{))}\SpecialCharTok{$}\NormalTok{breaks}
+
+\NormalTok{void }\OtherTok{\textless{}{-}} \FunctionTok{mapply}\NormalTok{(plot\_posterior, chain\_list\_RDS, colormap)}
+\FunctionTok{legend}\NormalTok{(}\StringTok{\textquotesingle{}topright\textquotesingle{}}\NormalTok{, }\AttributeTok{legend =}\NormalTok{ labels, }\AttributeTok{col =}\NormalTok{ colormap, }\AttributeTok{lty =} \DecValTok{1}\NormalTok{, }\AttributeTok{lwd =} \DecValTok{2}\NormalTok{, }\AttributeTok{ncol =} \DecValTok{1}\NormalTok{, }\AttributeTok{cex =} \FloatTok{0.8}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/1.5 plots-2.pdf}
+
+From this plot we can see that it seems that every chain reaches
+convergence, no matter the different level of autocorrelation.
+
+\hypertarget{exercise-2-mcmc-inference-on-linear-model}{%
+\section{Exercise 2: MCMC inference on Linear
+model}\label{exercise-2-mcmc-inference-on-linear-model}}
+
+\hypertarget{scenario-1}{%
+\subsection{Scenario}\label{scenario-1}}
+
+A set of measured data should follow, according to the physics model
+applied to them, a linear behavior. Data are the following: Y = \{
+-7.821 -1.494 -15.444 -10.807 -13.735 -14.442 -15.892 -18.326 \} X = \{
+5 6 7 8 9 10 11 12 \}
+
+Tasks:
+
+\begin{itemize}
+\item
+  Perform a simple linear regression model running a Markov Chain Monte
+  Carlo with JAGS, assuming that data follow the model: Z{[}i{]} = a + b
+  * X{[}i{]}; and the likelihood of the measured data follow a Gaussian
+  likelihood distribution: Y{[}i{]} dnorm(Z{[}i{]}, c) (you can
+  constrain the parameter a, b and c to the following intervals: a ∈
+  {[}1, 10{]}, b ∈ {[}−1, 3{]} and c ∈ {[}0.034, 4{]})
+\item
+  Run JAGS experimenting with the burn-in and number of iterations of
+  the chain. Plot the evolution of the chains and the posterior
+  distributions of a and b. Compute the 95\% credibility interval for
+  the parameters.
+\item
+  Using the obtained posterior distributions, compute the posterior
+  distribution of \(\sigma = \sqrt{(\frac{1}{c})}\).
+\end{itemize}
+
+\hypertarget{answers-1}{%
+\subsection{Answers}\label{answers-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{plot\_intervals }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(histogram)\{}
+  \CommentTok{\# Compute:}
+\NormalTok{  xlim  }\OtherTok{=} \FunctionTok{c}\NormalTok{(}\FunctionTok{min}\NormalTok{(histogram}\SpecialCharTok{$}\NormalTok{breaks), }\FunctionTok{max}\NormalTok{(histogram}\SpecialCharTok{$}\NormalTok{breaks))}
+\NormalTok{  step\_posterior }\OtherTok{\textless{}{-}} \FunctionTok{stepfun}\NormalTok{(histogram}\SpecialCharTok{$}\NormalTok{breaks, }\FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, histogram}\SpecialCharTok{$}\NormalTok{density, }\DecValTok{0}\NormalTok{))}
+\NormalTok{  mean\_posterior }\OtherTok{\textless{}{-}} \FunctionTok{mean\_pdf}\NormalTok{(step\_posterior, }\AttributeTok{lower =}\NormalTok{ xlim[}\DecValTok{1}\NormalTok{], }\AttributeTok{upper =}\NormalTok{ xlim[}\DecValTok{2}\NormalTok{])}
+\NormalTok{  std\_posterior  }\OtherTok{\textless{}{-}} \FunctionTok{std\_pdf}\NormalTok{ (step\_posterior, }\AttributeTok{lower =}\NormalTok{ xlim[}\DecValTok{1}\NormalTok{], }\AttributeTok{upper =}\NormalTok{ xlim[}\DecValTok{2}\NormalTok{])}
+\NormalTok{  interval\_95    }\OtherTok{\textless{}{-}} \FunctionTok{sapply}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\FloatTok{0.025}\NormalTok{, }\FloatTok{0.975}\NormalTok{), }\ControlFlowTok{function}\NormalTok{(P) }\FunctionTok{inverse\_cumulative}\NormalTok{(step\_posterior, }\AttributeTok{p =}\NormalTok{ P, }\AttributeTok{lower =}\NormalTok{ xlim[}\DecValTok{1}\NormalTok{], }\AttributeTok{upper =}\NormalTok{ xlim[}\DecValTok{2}\NormalTok{]))}
+  
+  \CommentTok{\# Plot:}
+\NormalTok{  x\_plot }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\AttributeTok{from=}\NormalTok{interval\_95[}\DecValTok{1}\NormalTok{], }\AttributeTok{to=}\NormalTok{interval\_95[}\DecValTok{2}\NormalTok{], }\AttributeTok{length.out=}\DecValTok{500}\NormalTok{)}
+\NormalTok{  y\_plot }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\FunctionTok{step\_posterior}\NormalTok{(x\_plot), }\DecValTok{0}\NormalTok{)}
+\NormalTok{  x\_plot }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(interval\_95[}\DecValTok{1}\NormalTok{], x\_plot, interval\_95[}\DecValTok{2}\NormalTok{])}
+  \FunctionTok{polygon}\NormalTok{(x\_plot, y\_plot, }\AttributeTok{col =} \FunctionTok{adjustcolor}\NormalTok{(color\_vector[}\DecValTok{7}\NormalTok{], }\AttributeTok{alpha.f =} \FloatTok{0.25}\NormalTok{),}\AttributeTok{border =} \ConstantTok{NA}\NormalTok{)}
+  
+  \FunctionTok{abline}\NormalTok{(}\AttributeTok{v=}\NormalTok{mean\_posterior, }\AttributeTok{col =}\NormalTok{ color\_vector[}\DecValTok{1}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{lty=}\StringTok{\textquotesingle{}longdash\textquotesingle{}}\NormalTok{)}
+  \FunctionTok{abline}\NormalTok{(}\AttributeTok{v=}\NormalTok{mean\_posterior }\SpecialCharTok{{-}}\NormalTok{ std\_posterior, }\AttributeTok{col =}\NormalTok{ color\_vector[}\DecValTok{6}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{lty=}\StringTok{\textquotesingle{}dashed\textquotesingle{}}\NormalTok{)}
+  \FunctionTok{abline}\NormalTok{(}\AttributeTok{v=}\NormalTok{mean\_posterior }\SpecialCharTok{+}\NormalTok{ std\_posterior, }\AttributeTok{col =}\NormalTok{ color\_vector[}\DecValTok{6}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{lty=}\StringTok{\textquotesingle{}dashed\textquotesingle{}}\NormalTok{)}
+  
+  \FunctionTok{legend}\NormalTok{(}\StringTok{"topright"}\NormalTok{, }\AttributeTok{legend =} \FunctionTok{c}\NormalTok{(}\StringTok{"Mean"}\NormalTok{, }\StringTok{"±std"}\NormalTok{), }\AttributeTok{col =} \FunctionTok{c}\NormalTok{(color\_vector[}\DecValTok{1}\NormalTok{], color\_vector[}\DecValTok{6}\NormalTok{]), }\AttributeTok{lty =} \FunctionTok{c}\NormalTok{(}\StringTok{\textquotesingle{}longdash\textquotesingle{}}\NormalTok{, }\StringTok{\textquotesingle{}dashed\textquotesingle{}}\NormalTok{))}
+  
+  \FunctionTok{legend}\NormalTok{(}\StringTok{"right"}\NormalTok{, }\AttributeTok{legend=}\StringTok{"95\%\% credibility interval"}\NormalTok{, }\AttributeTok{fill=}\NormalTok{color\_vector[}\DecValTok{7}\NormalTok{])}
+  
+  \FunctionTok{return}\NormalTok{()}
+  
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Defining data}
+\NormalTok{X }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{5}\NormalTok{, }\DecValTok{6}\NormalTok{, }\DecValTok{7}\NormalTok{, }\DecValTok{8}\NormalTok{, }\DecValTok{9}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{11}\NormalTok{, }\DecValTok{12}\NormalTok{)}
+\NormalTok{Y }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\FloatTok{7.821}\NormalTok{, }\SpecialCharTok{{-}}\FloatTok{1.494}\NormalTok{, }\SpecialCharTok{{-}}\FloatTok{15.444}\NormalTok{, }\SpecialCharTok{{-}}\FloatTok{10.807}\NormalTok{, }\SpecialCharTok{{-}}\FloatTok{13.735}\NormalTok{, }\SpecialCharTok{{-}}\FloatTok{14.442}\NormalTok{, }\SpecialCharTok{{-}}\FloatTok{15.892}\NormalTok{, }\SpecialCharTok{{-}}\FloatTok{18.326}\NormalTok{) }
+\NormalTok{N\_burnin }\OtherTok{\textless{}{-}} \DecValTok{2000} \CommentTok{\# length of the burn{-}in phase }
+\NormalTok{thinning }\OtherTok{\textless{}{-}} \DecValTok{7}
+\NormalTok{Nrep }\OtherTok{=} \DecValTok{10000}     \CommentTok{\# number of values to simulate}
+
+\CommentTok{\# Let\textquotesingle{} define the model}
+\NormalTok{model\_string }\OtherTok{\textless{}{-}} \StringTok{"model\{}
+\StringTok{  }
+\StringTok{  \# Model: Z[i] = a + b * X[i];}
+\StringTok{  \# Likelihood: Y[i] \textasciitilde{}dnorm(Z[i], c)}
+\StringTok{  \# a ∈ [1, 10], b ∈ [−1, 3] and c ∈ [0.034, 4]) }
+
+\StringTok{  \# Likelihood}
+\StringTok{  for (i in 1:length(X)) \{}
+\StringTok{    Z[i] \textless{}{-} a + b * X[i]}
+\StringTok{    Y[i] \textasciitilde{} dnorm(Z[i], c)}
+\StringTok{  \}}
+
+\StringTok{  \# Prior}
+\StringTok{  a \textasciitilde{} dunif({-}3, 10)}
+\StringTok{  b \textasciitilde{} dunif({-}3, 3)}
+\StringTok{  c \textasciitilde{} dunif(0.034, 4)}
+\StringTok{  }
+\StringTok{\}"}
+
+\CommentTok{\# Compile jags model}
+\NormalTok{dataList }\OtherTok{=} \FunctionTok{list}\NormalTok{(}\AttributeTok{X =}\NormalTok{ X, }\AttributeTok{Y =}\NormalTok{ Y)}
+\NormalTok{model }\OtherTok{\textless{}{-}} \FunctionTok{jags.model}\NormalTok{(}\AttributeTok{file =} \FunctionTok{textConnection}\NormalTok{(model\_string), }
+                    \AttributeTok{data =}\NormalTok{ dataList)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Compiling model graph
+##    Resolving undeclared variables
+##    Allocating nodes
+## Graph information:
+##    Observed stochastic nodes: 8
+##    Unobserved stochastic nodes: 3
+##    Total graph size: 40
+## 
+## Initializing model
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Add burnin}
+\FunctionTok{update}\NormalTok{(model, }\AttributeTok{n.iter =}\NormalTok{ N\_burnin)}
+
+\CommentTok{\# Sample the posterior}
+\NormalTok{posterior\_sample }\OtherTok{\textless{}{-}} \FunctionTok{coda.samples}\NormalTok{(model,}
+                       \AttributeTok{variable.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"a"}\NormalTok{, }\StringTok{"b"}\NormalTok{, }\StringTok{"c"}\NormalTok{),}
+                       \AttributeTok{n.iter =}\NormalTok{ Nrep, }\AttributeTok{thin =}\NormalTok{ thinning)}
+\FunctionTok{summary}\NormalTok{(posterior\_sample)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Iterations = 3007:12996
+## Thinning interval = 7 
+## Number of chains = 1 
+## Sample size per chain = 1428 
+## 
+## 1. Empirical mean and standard deviation for each variable,
+##    plus standard error of the mean:
+## 
+##      Mean      SD Naive SE Time-series SE
+## a  3.0795 3.15584 0.083512       0.163585
+## b -1.8012 0.36290 0.009603       0.018094
+## c  0.1104 0.05104 0.001351       0.001283
+## 
+## 2. Quantiles for each variable:
+## 
+##      2.5%      25%      50%     75%   97.5%
+## a -2.4440  0.68398  2.94979  5.4451  9.1601
+## b -2.5135 -2.05512 -1.79559 -1.5276 -1.1415
+## c  0.0406  0.07242  0.09966  0.1369  0.2315
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(posterior\_sample)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{posterior\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(posterior\_sample)}
+\CommentTok{\# Retrieve the chains}
+\NormalTok{a\_samples }\OtherTok{\textless{}{-}}\NormalTok{ posterior\_matrix[, }\StringTok{"a"}\NormalTok{]}
+\NormalTok{b\_samples }\OtherTok{\textless{}{-}}\NormalTok{ posterior\_matrix[, }\StringTok{"b"}\NormalTok{]}
+\NormalTok{c\_samples }\OtherTok{\textless{}{-}}\NormalTok{ posterior\_matrix[, }\StringTok{"c"}\NormalTok{]}
+
+\CommentTok{\# Set up the plotting area to have 2 rows and 2 column}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{))  }
+
+\FunctionTok{acf}\NormalTok{(a\_samples, }\AttributeTok{main =} \StringTok{"Autocorrelation of a"}\NormalTok{)}
+\FunctionTok{acf}\NormalTok{(b\_samples, }\AttributeTok{main =} \StringTok{"Autocorrelation of b"}\NormalTok{)}
+\FunctionTok{acf}\NormalTok{(c\_samples, }\AttributeTok{main =} \StringTok{"Autocorrelation of c"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/2-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Computing the histograms and the step functions}
+
+\NormalTok{a\_hist }\OtherTok{\textless{}{-}} \FunctionTok{hist}\NormalTok{(a\_samples, }\AttributeTok{breaks =} \DecValTok{30}\NormalTok{, }\AttributeTok{main =} \StringTok{"Posterior Distribution of a"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"a"}\NormalTok{, }\AttributeTok{freq =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{col =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{border =}\NormalTok{ color\_vector[}\DecValTok{6}\NormalTok{])}
+\NormalTok{a\_best }\OtherTok{\textless{}{-}}\NormalTok{ a\_hist}\SpecialCharTok{$}\NormalTok{mids[ }\FunctionTok{which.max}\NormalTok{(a\_hist}\SpecialCharTok{$}\NormalTok{density) ]}
+\FunctionTok{plot\_intervals}\NormalTok{(a\_hist)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/2 hist-1.pdf}
+
+\begin{verbatim}
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{b\_hist }\OtherTok{\textless{}{-}} \FunctionTok{hist}\NormalTok{(b\_samples, }\AttributeTok{breaks =} \DecValTok{30}\NormalTok{, }\AttributeTok{main =} \StringTok{"Posterior Distribution of b"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"b"}\NormalTok{, }\AttributeTok{freq =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{col =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{border =}\NormalTok{ color\_vector[}\DecValTok{6}\NormalTok{], }\AttributeTok{xlim=}\FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{3}\NormalTok{, }\DecValTok{0}\NormalTok{))}
+\NormalTok{b\_best }\OtherTok{\textless{}{-}}\NormalTok{ b\_hist}\SpecialCharTok{$}\NormalTok{mids[ }\FunctionTok{which.max}\NormalTok{(b\_hist}\SpecialCharTok{$}\NormalTok{density) ]}
+\FunctionTok{plot\_intervals}\NormalTok{(b\_hist)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/2 hist-2.pdf}
+
+\begin{verbatim}
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{c\_hist }\OtherTok{\textless{}{-}} \FunctionTok{hist}\NormalTok{(c\_samples, }\AttributeTok{breaks =} \DecValTok{30}\NormalTok{, }\AttributeTok{main =} \StringTok{"Posterior Distribution of c"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"c"}\NormalTok{, }\AttributeTok{freq =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{col =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{border =}\NormalTok{ color\_vector[}\DecValTok{6}\NormalTok{])}
+\NormalTok{c\_best }\OtherTok{\textless{}{-}}\NormalTok{ c\_hist}\SpecialCharTok{$}\NormalTok{mids[ }\FunctionTok{which.max}\NormalTok{(c\_hist}\SpecialCharTok{$}\NormalTok{density) ]}
+\FunctionTok{plot\_intervals}\NormalTok{(c\_hist)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/2 hist-3.pdf}
+
+\begin{verbatim}
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# {-}{-}{-}{-}{-} Linear Fit plot {-}{-}{-}{-}{-}}
+
+\FunctionTok{plot}\NormalTok{(X, Y, }\AttributeTok{main=}\StringTok{"Linear fit with Bayesian inference"}\NormalTok{, }\AttributeTok{col=}\NormalTok{color\_vector[}\DecValTok{6}\NormalTok{], }\AttributeTok{pch=}\DecValTok{19}\NormalTok{)}
+\FunctionTok{curve}\NormalTok{(b\_best}\SpecialCharTok{*}\NormalTok{x}\SpecialCharTok{+}\NormalTok{a\_best, }\AttributeTok{from =} \DecValTok{0}\NormalTok{, }\AttributeTok{to =} \DecValTok{13}\NormalTok{, }\AttributeTok{add=}\ConstantTok{TRUE}\NormalTok{, }\AttributeTok{col=}\NormalTok{color\_vector[}\DecValTok{1}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/2 hist-4.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sigma\_samples }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\DecValTok{1}\SpecialCharTok{/}\NormalTok{c\_samples)}
+
+\FunctionTok{hist}\NormalTok{(sigma\_samples, }\AttributeTok{breaks =} \DecValTok{50}\NormalTok{, }\AttributeTok{freq=}\ConstantTok{FALSE}\NormalTok{, }\AttributeTok{main=}\StringTok{"Posterior Distribution of sigma"}\NormalTok{, }\AttributeTok{xlab=}\FunctionTok{expression}\NormalTok{(sigma), }\AttributeTok{col=}\NormalTok{color\_vector[}\DecValTok{5}\NormalTok{])}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/2.3-1.pdf}
+
+\hypertarget{exercise-3-mcmc-inference-on-gaussian-model}{%
+\section{Exercise 3 MCMC inference on Gaussian
+model}\label{exercise-3-mcmc-inference-on-gaussian-model}}
+
+\hypertarget{scenario-2}{%
+\subsection{Scenario}\label{scenario-2}}
+
+Suppose we observe the following values x = 2.06, 5.56, 7.93, 6.56, 2.05
+and we assume that the data come from a Gaussian distribution with
+unknown mean m and variance s2
+
+\begin{itemize}
+\item
+  Build a simple JAGS model and run a Markov Chain Monte Carlo to obtain
+  the posterior distribution of the mean and variance.
+\item
+  Assume uniform prior distributions for the parameters, m dunif(-10,
+  10) and s dunif(0,50).
+\item
+  Compute also the posterior distribution for m/s.
+\end{itemize}
+
+\hypertarget{answers-2}{%
+\subsection{Answers}\label{answers-2}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Defining data}
+\NormalTok{X }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{( }\FloatTok{2.06}\NormalTok{, }\FloatTok{5.56}\NormalTok{, }\FloatTok{7.93}\NormalTok{, }\FloatTok{6.56}\NormalTok{, }\FloatTok{2.05}\NormalTok{)}
+
+\NormalTok{N\_burnin }\OtherTok{\textless{}{-}} \DecValTok{1000} \CommentTok{\# length of the burn{-}in phase }
+\NormalTok{thinning }\OtherTok{\textless{}{-}} \DecValTok{1}
+\NormalTok{Nrep }\OtherTok{=} \DecValTok{10000}     \CommentTok{\# number of values to simulate}
+
+\CommentTok{\# Let\textquotesingle{} define the model}
+\NormalTok{model\_string }\OtherTok{\textless{}{-}} \StringTok{"model\{}
+\StringTok{  }
+\StringTok{  ratio \textless{}{-} mu/s2}
+\StringTok{  }
+\StringTok{  \# Likelihood}
+\StringTok{  for (i in 1:length(X)) \{}
+\StringTok{    X[i] \textasciitilde{} dnorm(mu, s2)}
+\StringTok{  \}}
+
+\StringTok{  \# Prior}
+\StringTok{  mu \textasciitilde{} dunif({-}10, 10)}
+\StringTok{  s2 \textasciitilde{} dunif(0, 50)}
+\StringTok{  }
+\StringTok{\}"}
+
+\CommentTok{\# Compile jags model}
+\NormalTok{dataList }\OtherTok{=} \FunctionTok{list}\NormalTok{(}\AttributeTok{X =}\NormalTok{ X)}
+\NormalTok{model }\OtherTok{\textless{}{-}} \FunctionTok{jags.model}\NormalTok{(}\AttributeTok{file =} \FunctionTok{textConnection}\NormalTok{(model\_string), }
+                    \AttributeTok{data =}\NormalTok{ dataList)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Compiling model graph
+##    Resolving undeclared variables
+##    Allocating nodes
+## Graph information:
+##    Observed stochastic nodes: 5
+##    Unobserved stochastic nodes: 2
+##    Total graph size: 12
+## 
+## Initializing model
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Add burnin}
+\FunctionTok{update}\NormalTok{(model, }\AttributeTok{n.iter =}\NormalTok{ N\_burnin)}
+
+\CommentTok{\# Sample the posterior}
+\NormalTok{posterior\_sample }\OtherTok{\textless{}{-}} \FunctionTok{coda.samples}\NormalTok{(model,}
+                       \AttributeTok{variable.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"mu"}\NormalTok{, }\StringTok{"s2"}\NormalTok{, }\StringTok{"ratio"}\NormalTok{),}
+                       \AttributeTok{n.iter =}\NormalTok{ Nrep, }\AttributeTok{thin =}\NormalTok{ thinning)}
+\FunctionTok{summary}\NormalTok{(posterior\_sample)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Iterations = 2001:12000
+## Thinning interval = 1 
+## Number of chains = 1 
+## Sample size per chain = 10000 
+## 
+## 1. Empirical mean and standard deviation for each variable,
+##    plus standard error of the mean:
+## 
+##          Mean      SD Naive SE Time-series SE
+## mu     4.8340  1.1732 0.011732       0.016696
+## ratio 33.3148 36.3621 0.363621       0.485388
+## s2     0.2116  0.1204 0.001204       0.002047
+## 
+## 2. Quantiles for each variable:
+## 
+##          2.5%     25%     50%     75%    97.5%
+## mu    2.47484  4.1563  4.8478  5.5230   7.1406
+## ratio 8.76997 16.5341 24.4566 38.4228 114.0015
+## s2    0.04506  0.1229  0.1889  0.2777   0.5075
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(posterior\_sample)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/3-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Retrieve the samples}
+\NormalTok{posterior\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(posterior\_sample)}
+
+\NormalTok{mu\_samples }\OtherTok{\textless{}{-}}\NormalTok{ posterior\_matrix[, }\StringTok{"mu"}\NormalTok{]}
+\NormalTok{s2\_samples }\OtherTok{\textless{}{-}}\NormalTok{ posterior\_matrix[, }\StringTok{"s2"}\NormalTok{]}
+\NormalTok{ratio\_samples }\OtherTok{\textless{}{-}}\NormalTok{ posterior\_matrix[, }\StringTok{"ratio"}\NormalTok{]}
+
+\CommentTok{\# Set up the plotting area to have 2 rows and 2 column}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{2}\NormalTok{))  }
+
+\FunctionTok{acf}\NormalTok{(mu\_samples, }\AttributeTok{main =} \StringTok{"Autocorrelation of mu"}\NormalTok{)}
+\FunctionTok{acf}\NormalTok{(s2\_samples, }\AttributeTok{main =} \StringTok{"Autocorrelation of s2"}\NormalTok{)}
+\FunctionTok{acf}\NormalTok{(ratio\_samples, }\AttributeTok{main =} \StringTok{"Autocorrelation of ratio"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/3-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Computing the histograms and the step functions}
+
+\NormalTok{mu\_hist }\OtherTok{\textless{}{-}} \FunctionTok{hist}\NormalTok{(mu\_samples, }\AttributeTok{breaks =} \DecValTok{50}\NormalTok{, }\AttributeTok{main =} \StringTok{"Posterior Distribution of mu"}\NormalTok{, }\AttributeTok{xlab =} \FunctionTok{expression}\NormalTok{(mu), }\AttributeTok{freq =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{col =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{border =}\NormalTok{ color\_vector[}\DecValTok{6}\NormalTok{], }\AttributeTok{xlim=}\FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{2}\NormalTok{, }\DecValTok{12}\NormalTok{))}
+\FunctionTok{plot\_intervals}\NormalTok{(mu\_hist)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/3 plot-1.pdf}
+
+\begin{verbatim}
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{s2\_hist }\OtherTok{\textless{}{-}} \FunctionTok{hist}\NormalTok{(s2\_samples, }\AttributeTok{breaks =} \DecValTok{50}\NormalTok{, }\AttributeTok{main =} \StringTok{"Posterior Distribution of s2"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"s2"}\NormalTok{, }\AttributeTok{freq =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{col =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{border =}\NormalTok{ color\_vector[}\DecValTok{6}\NormalTok{])}
+\FunctionTok{plot\_intervals}\NormalTok{(s2\_hist)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/3 plot-2.pdf}
+
+\begin{verbatim}
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ratio\_hist }\OtherTok{\textless{}{-}} \FunctionTok{hist}\NormalTok{(ratio\_samples, }\AttributeTok{breaks =} \DecValTok{300}\NormalTok{, }\AttributeTok{main =} \StringTok{"Posterior Distribution of the ratio"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"ratio"}\NormalTok{, }\AttributeTok{freq =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{col =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{border =}\NormalTok{ color\_vector[}\DecValTok{6}\NormalTok{], }\AttributeTok{xlim =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{200}\NormalTok{))}
+\FunctionTok{plot\_intervals}\NormalTok{(ratio\_hist)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/3 plot-3.pdf}
+
+\begin{verbatim}
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Autocorrelation plot}
+\NormalTok{lags }\OtherTok{\textless{}{-}} \FunctionTok{seq}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{150}\NormalTok{, }\DecValTok{5}\NormalTok{)}
+\NormalTok{autocorrelation }\OtherTok{\textless{}{-}} \FunctionTok{autocorr}\NormalTok{(mcmc\_chain, }\AttributeTok{lags =}\NormalTok{ lags)}
+
+\FunctionTok{plot}\NormalTok{(lags, autocorrelation, }\AttributeTok{type =} \StringTok{\textquotesingle{}s\textquotesingle{}}\NormalTok{, }\AttributeTok{col=}\NormalTok{color\_vector[}\DecValTok{7}\NormalTok{], }\AttributeTok{lty=}\DecValTok{1}\NormalTok{, }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{, }\AttributeTok{main =} \StringTok{\textquotesingle{}Autocorrelation of the chain\textquotesingle{}}\NormalTok{, }\AttributeTok{xlab =} \StringTok{\textquotesingle{}lags\textquotesingle{}}\NormalTok{, }\AttributeTok{ylab=} \StringTok{\textquotesingle{}autocorrelation\textquotesingle{}}\NormalTok{) }\CommentTok{\#\textquotesingle{}log(|autocorrelation|)\textquotesingle{}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/3 plot-4.pdf}
+
+\hypertarget{exercise-4-mcmc-and-edwin-hubble-law}{%
+\section{Exercise 4 MCMC and Edwin Hubble
+law}\label{exercise-4-mcmc-and-edwin-hubble-law}}
+
+\hypertarget{scenario-3}{%
+\subsection{Scenario}\label{scenario-3}}
+
+The data set that Edwin Hubble used to show that galaxies are moving
+either away or towards us are given in the following table:
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule\noalign{}
+D {[}parsec{]} & V {[}km/s{]} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+0.0032 & 170 \\
+0.0034 & 290 \\
+0.2140 & -130 \\
+0.2630 & -70 \\
+0.2750 & -185 \\
+------------ & --------- \\
+0.2750 & -220 \\
+0.4500 & 200 \\
+0.5000 & 290 \\
+0.5000 & 270 \\
+0.6300 & 200 \\
+------------ & --------- \\
+0.8000 & 920 \\
+0.9000 & 450 \\
+0.9000 & 500 \\
+0.9000 & 500 \\
+0.9000 & 960 \\
+------------ & --------- \\
+2.0000 & 500 \\
+2.0000 & 850 \\
+2.0000 & 800 \\
+2.0000 & 1090 \\
+\end{longtable}
+
+Using this data set define a JAGS model to fit data with the following:
+
+\begin{itemize}
+\item
+  V{[}i{]} from dnorm(b * D{[}i{]}, c), where V represent the velocity
+  in units of km/s, D is the observed distance (in units of parsec), and
+  b and c are two parameters of the model
+\item
+  Assume whatever prior distribution you think is appropriate plot the
+  evolution of the chains, the posterior distribution of the parameters
+  and the 95\% credibility interval
+\end{itemize}
+
+\hypertarget{answers-3}{%
+\subsection{Answers}\label{answers-3}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Defining data}
+\NormalTok{D }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{( }\FloatTok{0.0032}\NormalTok{, }\FloatTok{0.0034}\NormalTok{, }\FloatTok{0.214}\NormalTok{,  }\FloatTok{0.263}\NormalTok{,  }\FloatTok{0.275}\NormalTok{,  }\FloatTok{0.275}\NormalTok{,  }\FloatTok{0.45}\NormalTok{,   }\FloatTok{0.5}\NormalTok{,    }\FloatTok{0.5}\NormalTok{,    }\FloatTok{0.63}\NormalTok{,   }\FloatTok{0.8}\NormalTok{,    }\FloatTok{0.9}\NormalTok{,    }\FloatTok{0.9}\NormalTok{,    }\FloatTok{0.9}\NormalTok{,    }\FloatTok{0.9}\NormalTok{,    }\DecValTok{2}\NormalTok{,  }\DecValTok{2}\NormalTok{,  }\DecValTok{2}\NormalTok{,  }\DecValTok{2}\NormalTok{)}
+
+\NormalTok{V }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\DecValTok{170}\NormalTok{, }\DecValTok{290}\NormalTok{,    }\SpecialCharTok{{-}}\DecValTok{130}\NormalTok{,   }\SpecialCharTok{{-}}\DecValTok{70}\NormalTok{,    }\SpecialCharTok{{-}}\DecValTok{185}\NormalTok{,   }\SpecialCharTok{{-}}\DecValTok{220}\NormalTok{,   }\DecValTok{200}\NormalTok{,    }\DecValTok{290}\NormalTok{,    }\DecValTok{270}\NormalTok{,    }\DecValTok{200}\NormalTok{,    }\DecValTok{920}\NormalTok{,    }\DecValTok{450}\NormalTok{,    }\DecValTok{500}\NormalTok{,    }\DecValTok{500}\NormalTok{,    }\DecValTok{960}\NormalTok{,    }\DecValTok{500}\NormalTok{,    }\DecValTok{850}\NormalTok{,    }\DecValTok{800}\NormalTok{,    }\DecValTok{1090}\NormalTok{)}
+
+\NormalTok{N\_burnin }\OtherTok{\textless{}{-}} \DecValTok{1000} \CommentTok{\# length of the burn{-}in phase }
+\NormalTok{thinning }\OtherTok{\textless{}{-}} \DecValTok{1}
+\NormalTok{Nrep }\OtherTok{=} \DecValTok{10000}     \CommentTok{\# number of values to simulate}
+
+\CommentTok{\# Let\textquotesingle{} define the model}
+\NormalTok{model\_string }\OtherTok{\textless{}{-}} \StringTok{"model\{}
+\StringTok{  }
+\StringTok{  \# Likelihood}
+\StringTok{  for (i in 1:length(D)) \{}
+\StringTok{    V[i] \textasciitilde{} dnorm(b*D[i], c)}
+\StringTok{  \}}
+
+\StringTok{  \# Prior}
+\StringTok{  b \textasciitilde{} dunif(0, 1200)}
+\StringTok{  c \textasciitilde{} dunif(0, 0.001)}
+\StringTok{  }
+\StringTok{\}"}
+
+\CommentTok{\# Compile jags model}
+\NormalTok{dataList }\OtherTok{=} \FunctionTok{list}\NormalTok{(}\AttributeTok{D =}\NormalTok{ D, }\AttributeTok{V=}\NormalTok{V)}
+\NormalTok{model }\OtherTok{\textless{}{-}} \FunctionTok{jags.model}\NormalTok{(}\AttributeTok{file =} \FunctionTok{textConnection}\NormalTok{(model\_string), }
+                    \AttributeTok{data =}\NormalTok{ dataList)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Compiling model graph
+##    Resolving undeclared variables
+##    Allocating nodes
+## Graph information:
+##    Observed stochastic nodes: 19
+##    Unobserved stochastic nodes: 2
+##    Total graph size: 54
+## 
+## Initializing model
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Add burnin}
+\FunctionTok{update}\NormalTok{(model, }\AttributeTok{n.iter =}\NormalTok{ N\_burnin)}
+
+\CommentTok{\# Sample the posterior}
+\NormalTok{posterior\_sample }\OtherTok{\textless{}{-}} \FunctionTok{coda.samples}\NormalTok{(model,}
+                       \AttributeTok{variable.names =} \FunctionTok{c}\NormalTok{(}\StringTok{"b"}\NormalTok{, }\StringTok{"c"}\NormalTok{),}
+                       \AttributeTok{n.iter =}\NormalTok{ Nrep, }\AttributeTok{thin =}\NormalTok{ thinning)}
+\FunctionTok{summary}\NormalTok{(posterior\_sample)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Iterations = 2001:12000
+## Thinning interval = 1 
+## Number of chains = 1 
+## Sample size per chain = 10000 
+## 
+## 1. Empirical mean and standard deviation for each variable,
+##    plus standard error of the mean:
+## 
+##        Mean        SD  Naive SE Time-series SE
+## b 4.578e+02 5.751e+01 5.751e-01      7.508e-01
+## c 1.561e-05 4.900e-06 4.900e-08      6.688e-08
+## 
+## 2. Quantiles for each variable:
+## 
+##        2.5%       25%       50%       75%     97.5%
+## b 3.436e+02 4.209e+02 4.574e+02 4.953e+02 5.715e+02
+## c 7.455e-06 1.208e-05 1.513e-05 1.858e-05 2.647e-05
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{plot}\NormalTok{(posterior\_sample)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/4-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Retrieve the samples}
+\NormalTok{posterior\_matrix }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(posterior\_sample)}
+
+\NormalTok{b\_samples }\OtherTok{\textless{}{-}}\NormalTok{ posterior\_matrix[, }\StringTok{"b"}\NormalTok{]}
+\NormalTok{c\_samples }\OtherTok{\textless{}{-}}\NormalTok{ posterior\_matrix[, }\StringTok{"c"}\NormalTok{]}
+
+\CommentTok{\# Set up the plotting area to have 1 rows and 2 column}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{mfrow =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{))  }
+
+\FunctionTok{acf}\NormalTok{(b\_samples, }\AttributeTok{main =} \StringTok{"Autocorrelation of b"}\NormalTok{)}
+\FunctionTok{acf}\NormalTok{(c\_samples, }\AttributeTok{main =} \StringTok{"Autocorrelation of c"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/4-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{b\_hist }\OtherTok{\textless{}{-}} \FunctionTok{hist}\NormalTok{(b\_samples, }\AttributeTok{breaks =} \DecValTok{30}\NormalTok{, }\AttributeTok{main =} \StringTok{"Posterior Distribution of b"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"b"}\NormalTok{, }\AttributeTok{freq =} \ConstantTok{FALSE}\NormalTok{, }\AttributeTok{col =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{border =}\NormalTok{ color\_vector[}\DecValTok{6}\NormalTok{], }\AttributeTok{xlim =} \FunctionTok{c}\NormalTok{(}\DecValTok{200}\NormalTok{,}\DecValTok{800}\NormalTok{))}
+\FunctionTok{plot\_intervals}\NormalTok{(b\_hist)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/4 plot-1.pdf}
+
+\begin{verbatim}
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{b\_best }\OtherTok{\textless{}{-}}\NormalTok{ b\_hist}\SpecialCharTok{$}\NormalTok{mids[ }\FunctionTok{which.max}\NormalTok{(b\_hist}\SpecialCharTok{$}\NormalTok{density) ]}
+
+
+\NormalTok{c\_hist }\OtherTok{\textless{}{-}} \FunctionTok{hist}\NormalTok{(c\_samples, }\AttributeTok{breaks =} \DecValTok{30}\NormalTok{, }\AttributeTok{main =} \StringTok{"Posterior Distribution of c"}\NormalTok{, }\AttributeTok{xlab =} \StringTok{"c"}\NormalTok{, }\AttributeTok{freq =} \ConstantTok{FALSE}\NormalTok{,  }\AttributeTok{col =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{border =}\NormalTok{ color\_vector[}\DecValTok{6}\NormalTok{])}
+\FunctionTok{plot\_intervals}\NormalTok{(c\_hist)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/4 plot-2.pdf}
+
+\begin{verbatim}
+## NULL
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{c\_best }\OtherTok{\textless{}{-}}\NormalTok{ c\_hist}\SpecialCharTok{$}\NormalTok{mids[ }\FunctionTok{which.max}\NormalTok{(c\_hist}\SpecialCharTok{$}\NormalTok{density) ]}
+
+
+\FunctionTok{plot}\NormalTok{(D, V, }\AttributeTok{main=}\StringTok{"Fit Hubble Law"}\NormalTok{, }\AttributeTok{col=}\NormalTok{color\_vector[}\DecValTok{6}\NormalTok{], }\AttributeTok{pch=}\DecValTok{19}\NormalTok{)}
+\FunctionTok{curve}\NormalTok{(b\_best}\SpecialCharTok{*}\NormalTok{x, }\AttributeTok{from =} \DecValTok{0}\NormalTok{, }\AttributeTok{to =} \DecValTok{13}\NormalTok{, }\AttributeTok{add=}\ConstantTok{TRUE}\NormalTok{, }\AttributeTok{col=}\NormalTok{color\_vector[}\DecValTok{7}\NormalTok{], }\AttributeTok{lwd=}\DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Emanuele_Coradin_Rlab05_files/figure-latex/4 plot-3.pdf}
+
+\end{document}
