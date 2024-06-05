@@ -1,0 +1,617 @@
+---
+title: "Assignment 6"
+author: "Emanuele Coradin"
+date: "2024-06-10"
+output: 
+  read_document: rmdformats::readthedown
+  pdf_document:
+    number_sections: true
+    toc: true
+    toc_depth: 2
+  html_document:
+    number_sections: true
+    theme: spacelab
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+color_vector <- c("#CC0000",   # Dark red
+                  "#CC79A7",   # Muted purple
+                  "#D55E00",   # Vermilion
+                  "#009E73",   # Bluish green
+                  "#56B4E9",   # Sky blue
+                  '#000046',   # Deep Blue
+                  "#DB1E60",   # Pinkish-red
+                  "#E69F00")   # Yellow-orange
+
+```
+
+```{r, message=FALSE, echo=FALSE}
+library(dplyr)
+library(ggplot2)
+library(reshape2)
+library(latex2exp)
+library(coda)
+library(rstan)
+library(bayesplot)
+```
+
+```{r }
+#------------- Useful functions -------------
+mean_pdf   <- function(f, lower, upper){integrate(function(x) x*f(x), lower, upper,stop.on.error = FALSE)$value}
+std_pdf <- function(f, lower, upper) {
+  mu <- mean_pdf(f, lower, upper)
+  sqrt(integrate(function(x) (x - mu)^2 * f(x), lower, upper, stop.on.error = FALSE)$value / integrate(f, lower, upper, stop.on.error = FALSE)$value)
+}
+cumulative <- function(f, lower, X){integrate(f, lower, X,stop.on.error = FALSE)$value}
+inverse_cumulative <- function(f, p, lower, upper){uniroot(function(x) cumulative(f, lower, x)-p, c(lower, upper))$root}
+
+#inference functions
+binom_likelihood <- function(prob, ...) sapply(prob, function(P)  prod(dbinom(prob=P, ...)))
+pois_likelihood  <- function(mu, ...)   sapply(mu,   function(MU) prod(dpois (lambda = MU, ...)))
+norm_likelihood  <- function(mu, ...)   sapply(mu,   function(MU) prod(dnorm (mean = MU, ...) ))
+
+posterior <- function(parameter, prior, likelihood, lower, upper, ...) {
+  unnormalized <- function(x) likelihood(x, ...)*prior(x)
+  norm_factor  <- integrate(unnormalized, lower = lower, upper = upper)$value
+  unnormalized(parameter)/norm_factor
+}
+
+getBetaMean  <- function (alpha, beta) alpha/(alpha+beta)
+getBetaSD    <- function (alpha, beta) sqrt(alpha*beta/(alpha+beta+1))/(alpha+beta)
+getGammaMean <- function (alpha, beta) alpha/beta
+getGammaSD   <- function (alpha, beta) sqrt(alpha)/beta
+```
+
+
+# Exercise 1: Poisson Distribution and Horse Kicks in the Prussian Army
+
+## Scenario
+
+Ladislaus Josephovich Bortkiewicz, a Russian economist and statistician, observed the usefulness of the Poisson distribution in applied statistics, particularly when describing low-frequency events in large populations. A famous example by Bortkiewicz showed that the number of deaths by horse kick among Prussian army soldiers followed the Poisson distribution.
+
+Data:
+
+Consider two sets of observations (number of deaths caused by horse kicks, y) taken over a large fixed time interval in two different corps (n_i denotes the number of observations for corps i):
+
+| y(deaths) |  n_1 (observations)	| n_2 (observations) |
+|-----------|---------------------|--------------------|
+| 0	        |  109	              | 144                |
+| 1       	|  65	                | 91                 |
+| 2       	|  22	                | 32                 |
+| 3       	|  3	                | 11                 |
+| 4	        |  1	                | 2                  |
+| ≥ 5       |  0 	                | 0	                 |                   
+
+
+## Tasks:
+
+(a) Uniform Prior:
+
+  - Assuming a uniform prior distribution for the death rate (λ) over the measurement time, calculate and plot the posterior distribution for λ.
+  - Determine the posterior mean, median, and variance of λ.
+  - Compute the 95% credibility interval for λ.
+
+(b) Jeffreys' Prior:
+
+  - Assuming a Jeffreys' prior distribution for λ, $g(\lambda) \propto \lambda^{-0.5}$ (with λ > 0), calculate and plot the posterior distribution for λ.
+  - Determine the posterior mean, median, and variance of λ.
+  - Compute the 95% credibility interval for λ.
+
+## Answers
+
+Recall the form of a Poisson likelihood $L(\lambda | x\ H) = \prod_{i=1}^{n} \frac{\lambda^{x_i} e^{-\lambda}}{x_i!}$ and of a Gamma distribution  $\text{Gamma}(x | \alpha, \beta) = \frac{x^{\alpha - 1} e^{-x\beta}\beta^{\alpha} }{\Gamma(\alpha)}$, the posterior takes the form: $P(\lambda\ |\ x\ H) = \text{Gamma}(\lambda\ |\ \alpha^\prime + \sum_i{x_i}, \beta^\prime + N)$
+
+Considering: 
+
+(a) Uniform Prior
+
+  - A uniform prior can be thought as  $\lim_{\beta \rightarrow 0}\ \text{Gamma}(x | 1, \beta)$, so the posterior is $P(\lambda_{1} | x\ H) = \text{Gamma}(\lambda_{1} |\ \sum_i{x_i} +1, N ) =  \text{Gamma}(\lambda_{1}\ |\ 123, 200) $ for the first set and $P(\lambda_{2}\ |\ x\ H) = \text{Gamma}(\lambda_{2}\ |\ 197, 280)$ for the second one.
+  
+  - Now we can calculate:
+    * $E[\lambda_{1}] = \frac\alpha\beta = 0.62$ 
+    * $E[\lambda_{2}] = 0.70$
+    * $SD[\lambda_{1}] = \frac{\sqrt\alpha}{\beta} = 0.06$
+    * $SD[\lambda_{2}] = 0.05$
+
+```{r 1 plot }
+plot_exe1 <- function(alpha, beta){
+  gamma_posterior_1   <- function(p) sapply(p, function(P) dgamma(P, alpha[1], rate=beta[1]))
+  gamma_posterior_2   <- function(p) sapply(p, function(P) dgamma(P, alpha[2], rate=beta[2]))
+  
+  mean <- mapply(getGammaMean, alpha, beta)
+  SD   <- mapply(getGammaSD, alpha, beta)
+  
+  curve(gamma_posterior_1, from = 0, to=1, n = 1000, xlim = c(0.4, 1), main="Bayesian posterior of Lambda", xlab=expression(lambda), ylab = "probability density", col=color_vector[1], lwd=3, ylim = c(0, 10))
+  
+  curve(gamma_posterior_2, from = 0, to=1, n = 1000, col=color_vector[6], lwd=3, lty=2, add = TRUE)
+  
+  
+  gamma_95_interval <- mapply(function(A, B) sapply(c(0.025, 0.975), function(p) qgamma(p, A, rate=B)), alpha, beta)
+  
+  x_plot_1 <- seq(from = gamma_95_interval[1,1], to = gamma_95_interval[2,1], length.out=1000)
+  y_plot_1 <- c(0, gamma_posterior_1(x_plot_1[2:999]), 0)
+  
+  x_plot_2 <- seq(from = gamma_95_interval[1,2], to = gamma_95_interval[2,2], length.out=1000)
+  y_plot_2 <-  c(0, gamma_posterior_2(x_plot_2[2:999]), 0)
+  
+  polygon(x_plot_1, y_plot_1, col = adjustcolor(color_vector[1], alpha.f = 0.4), border = NA)
+  polygon(x_plot_2, y_plot_2, col = adjustcolor(color_vector[6], alpha.f = 0.4), border = NA)
+  
+  
+  abline(v = mean[1], col = color_vector[7], lty=2, lwd = 3)
+  abline(v = mean[2], col = color_vector[5], lty=2, lwd = 3)
+  
+  legend('topright', legend = c('Set 1', 'Set 2'), lty = c(1, 2), lwd=3, col = c(color_vector[1], color_vector[6]))
+  
+  
+  writeLines(sprintf('
+    The 95%% credibility interval for the posterior of Set 1 is [ %.3f , %.3f ]
+    The 95%% credibility interval for the posterior of Set 2 is [ %.3f , %.3f ]', 
+    gamma_95_interval[1,1], gamma_95_interval[2,1], gamma_95_interval[1,2], gamma_95_interval[2,2]))
+  
+  return()
+}
+```
+
+```{r 1a}
+alpha <- c(123, 197)
+beta  <- c(200, 280)
+
+plot_exe1(alpha, beta)
+```
+
+
+(b) Jeffreys' Prior
+  
+  - The Jeffreys' prior can be thought as  $\lim_{\beta \rightarrow 0}\ \text{Gamma}(x | 0.5, \beta)$, so the posteriors become $P(\lambda_1 | x\ H) = \text{Gamma}(\lambda_1 |\ \sum_i{x_i}, N ) =  \text{Gamma}(\lambda_1\ |\ 122.5, 200) $ for the first set and $P(\lambda_2\ |\ x\ H) = \text{Gamma}(\lambda_2\ |\ 196.5, 280)$ for the second one. Both the mean and the standard deviation are so essentially the same as before.
+
+```{r 1b}
+alpha <- c(122.5, 196)
+beta  <- c(200.5, 280)
+
+plot_exe1(alpha, beta)
+```
+
+# Exercise 2: Poisson Distribution and Horse Kicks in the Prussian Army with STAN
+
+## Task
+
+Solve Exercise 1 using a Markov Chain Monte Carlo using stan.
+
+### Using a Uniform Prior
+
+```{r }
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+
+occurencies <- c(109, 65, 22, 3, 1)
+indices <- c(0, cumsum(occurencies))
+
+observations <- vector(length = sum(occurencies))
+
+for(i in seq_along(occurencies)){
+  for(j in (indices[i]+1):indices[i+1]){
+    observations[j] <- i-1
+  }
+}
+
+N = length(observations)
+
+dataList= list(N=N, y = observations)
+
+modelString = 
+  " 
+    data {
+      int <lower=0> N; 
+      int y[N]; 
+    } 
+    
+    parameters { 
+      real <lower=0> Lambda; 
+    } 
+    
+    model { 
+      y ~ poisson (Lambda); 
+    }
+  "
+
+stanDso <- stan_model ( model_code = modelString )
+
+stanFit <- sampling ( object = stanDso , 
+                      data = dataList , 
+                      chains = 2 , 
+                      iter = 5000 , 
+                      warmup = 200 , 
+                      thin = 1)
+stanPosterior <- as.array(stanFit)
+```  
+
+
+```{r }
+# Inspecting the chains
+inspect_chains <- function(stanFit, stanPosterior, parameter){
+  rstan :: traceplot (stanFit ,pars=c(parameter)) + 
+    theme_minimal() +
+    labs(title = paste("Trace Plot of ", parameter),
+         x = "Iteration",
+         y = parameter) 
+  
+  mcmcCoda <- mcmc.list( lapply (1:ncol( stanFit ), function (x) { mcmc(stanPosterior[,x ,]) }))
+  autocorr.plot(mcmcCoda)
+  
+  # Default plots of the posterior
+  
+  color_scheme_set("red")
+  
+  density_plot <- plot(stanFit ,pars=c(parameter))+ 
+    theme_minimal() +
+    labs(title = paste("Posterior Density of ", parameter),
+         x = parameter,
+         y = "Density")
+  print(density_plot)
+  
+  areas_plot <- mcmc_areas(stanPosterior, pars=c(parameter), point_est = 'mean', prob = 0.95)+
+    theme_minimal() +
+    labs(title = paste("Posterior Distribution of ", parameter),
+         x = parameter,
+         y = "Density")
+  print(areas_plot)
+  
+  hist_plot <- mcmc_hist(stanPosterior, pars=c(parameter)) +
+    theme_minimal() +
+    labs(title = paste("Posterior Histogram of ", parameter),
+         x = parameter,
+         y = "Frequency")
+  print(hist_plot)
+  
+  # --------------- write output ------------------
+  lambda_summary <- summary(stanFit, pars = parameter)$summary
+  
+  lambda_mean <- lambda_summary[parameter, "mean"]
+  lambda_sd <- lambda_summary[parameter, "sd"]
+  lambda_cred_int <- lambda_summary[parameter, c("2.5%", "97.5%")]
+  
+  writeLines(sprintf('
+    Mean of %s: %.3f
+    SD of %s: %.3f
+    95%% credibility interval: [ %.3f , %.3f ]',
+    parameter,lambda_mean, parameter, lambda_sd, lambda_cred_int[1], lambda_cred_int[2]
+  ))
+}
+
+inspect_chains(stanFit, stanPosterior, "Lambda")
+```
+
+## Using the Jeffrey's prior
+```{r }
+modelString_Jeffrey = 
+  " 
+    data {
+      int <lower=0> N; 
+      int y[N]; 
+    } 
+    
+    parameters { 
+      real <lower=0> Lambda; 
+    } 
+    
+    model { 
+      target += -0.5*log(Lambda);
+      y ~ poisson (Lambda); 
+    }
+  "
+
+stanDso_Jeffrey <- stan_model ( model_code = modelString_Jeffrey )
+
+stanFit_Jeffrey <- sampling ( object = stanDso_Jeffrey , 
+                      data = dataList , 
+                      chains = 2 , 
+                      iter = 5000 , 
+                      warmup = 200 , 
+                      thin = 1)
+stanPosterior_Jeffrey <- as.array(stanFit_Jeffrey)
+
+inspect_chains(stanFit_Jeffrey, stanPosterior_Jeffrey, "Lambda")
+```
+# Exercise 3: Water Quality and Bacter X Levels in Streams
+
+## Scenario
+
+This study investigates the presence of bacter X in stream water samples. A high level of bacter X is defined as exceeding 100 per 100 ml of water.
+
+Data:
+
+n = 116 water samples collected from streams with high environmental impact.
+y = 11 samples with a high bacter X level.
+Tasks:
+
+(a) Frequentist Estimator:
+
+  - Find the frequentist estimator for p, the probability of a sample exceeding the bacter X level.
+
+(b) Posterior Distribution (Beta(1, 10) Prior):
+
+  - Assuming a Beta(1, 10) prior distribution for p, calculate and plot the posterior distribution P(p | y).
+
+(c) Bayesian Estimator and Credible Interval:
+
+  - Determine the Bayesian estimator for p (posterior mean).
+  - Calculate the posterior variance of p.
+  - Compute a 95% credible interval for p.
+
+(d) Hypothesis Testing:
+
+  - Test the hypothesis H₀: p = 0.1 (null hypothesis) versus H₁: p ≠ 0.1 (alternative hypothesis) at a 5% significance level using both:
+  - Frequentist approach
+  - Bayesian approach
+
+(e) New Measurement:
+
+  - A new measurement one month later analyzes n = 165 water samples.
+  - y = 9 samples showed a high bacter X level.
+
+(f) New Measurement - Frequentist Estimator:
+
+  - Find the frequentist estimator for p based on the new data.
+
+(g) New Measurement - Bayesian Estimators:
+
+  - Assuming a Beta(1, 10) prior distribution for p, calculate the posterior estimator (mean) for the new data.
+  - Alternatively, consider the posterior probability from part (c) as the prior for the new data. Calculate the resulting posterior estimator (mean) for p.
+
+(h) New Measurement - Hypothesis Testing:
+
+  - Test the hypothesis H₀: p = 0.1 (null hypothesis) versus H₁: p ≠ 0.1 (alternative hypothesis) at a 5% significance level using both:
+  - Frequentist approach based on the new data
+  - Bayesian approach based on the chosen prior in part (f)
+  
+## Answers
+
+(a) Frequentist Estimator:
+  
+  - The number of samples found to have an high bacter X level is a random variable following a binomial distribution $P(y | n, p) = \binom{n}{y} p^y (1-p)^{n-y}$. Since $E[y] = p \cdot n$, the frequentist estimator for p is $p= \frac{E[y]}{n} = \frac{11}{116} =  9.5\%$.
+
+(b) Posterior Distribution (Beta(1, 10) Prior):
+
+  - Given a Beta prior, the posterior is also a Beta of the form: $P(p\ |\ y, n, H) = \text{Beta}(\alpha^\prime + y, \beta^\prime + n - y) = \text{Beta} (12, 115)$.
+
+(c) Bayesian Estimator and Credible Interval:
+
+  - Considering the mean as the Bayesian estimator for p, $E[p] = \frac{\alpha}{\alpha+\beta} = \frac{12}{127}=9.5\%$.
+  - The posterior variance of p is $SD[p] 0.03 = \sqrt{\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}} = $
+  - Computing a 95% credible interval for p:
+  
+
+```{r 3c plot }
+alpha <- 12
+beta <- 115
+
+beta_posterior <- function(p) sapply(p, function(x) dbeta(x, alpha, beta))
+
+mean <- getBetaMean(alpha, beta)
+SD   <- getBetaSD  (alpha, beta)
+
+curve(beta_posterior, from = 0, to=1, n = 1000, xlim = c(0,0.3), main="Bayesian posterior of p", xlab="p", ylab = "probability density", col=color_vector[1], lwd=3, ylim = c(0, 16.5))
+
+beta_95_interval <- sapply(c(0.025, 0.975), function(p) qbeta(p, alpha, beta))
+x_plot <- seq(beta_95_interval[1], beta_95_interval[2], length.out=1000)
+y_plot <- c(0, beta_posterior(x_plot[2:999]), 0)
+
+polygon(x_plot, y_plot, col = adjustcolor(color_vector[5], alpha.f = 0.5), border = NA)
+
+abline(v = mean, col = color_vector[7], lty=2, lwd = 3)
+abline(v = mean - SD, col = color_vector[6], lty = 3, lwd = 3)
+abline(v = mean + SD, col = color_vector[6], lty = 3, lwd = 3)
+
+legend('topright', legend = c('mean', 'mean ± std'), lty = c(2, 3, 3), lwd=3, col = c(color_vector[7], color_vector[6], color_vector[6]))
+
+legend('right', legend = '95% credibility interval', fill = adjustcolor(color_vector[5], alpha.f = 0.5))
+
+
+writeLines(sprintf(
+  'The 95%% credibility interval for the posterior is [ %.3f , %.3f ]', beta_95_interval[1], beta_95_interval[2]))
+```
+
+(d) Hypothesis Testing:
+
+  - Test the hypothesis H₀: p = 0.1 (null hypothesis) versus H₁: p ≠ 0.1 (alternative hypothesis) at a 5% significance level using both:
+  - Frequentist approach: looking at the results below we can see that we can accept the null hypotesis.
+  
+```{r 3d } 
+# Frequentist test
+binom.test(x=11, n = 116, p = 0.1, alternative = "two.sided")
+```
+
+  - Bayesian approach: looking at the plot above, we can see the $\hat p$ falls inside the 95% credibility interval, so we can accept the null hypotesis. 
+ 
+
+(e) New Measurement:
+
+  - A new measurement one month later analyzes n = 165 water samples.
+  - y = 9 samples showed a high bacter X level.
+
+(f) New Measurement - Frequentist Estimator:
+
+  - Just looking at the new data, the best frequentis estimator for p is again $p = \frac y n = 5.5\%$
+
+(g) New Measurement - Bayesian Estimators:
+
+  - Assuming a Beta(1, 10) prior distribution for p, the posterior is $\text{Beta}(10, 166)$, so considering the mean as the best estimator we obtain: $E[p] = \frac {\alpha}{\alpha + \beta} = 5.7\% $
+  
+  - Considering instead the posterior probability from part (c) as the prior for the new data, the posterior becomes $\text{Beta}(21, 271)$, thus the estimator for p becomes $p = 7.2\%$.
+
+(h) New Measurement - Hypothesis Testing:
+
+  - Test the hypothesis H₀: p = 0.1 (null hypothesis) versus H₁: p ≠ 0.1 (alternative hypothesis) at a 5% significance level using both:
+  - Frequentist approach based on the new data: from the results below we can see that we still have to accept the null hypotesis, even though it is close the the margin of the credibility interval. 
+  
+```{r 3h } 
+# Frequentist test
+binom.test(x=9, n = 165, p = 0.1, alternative = "two.sided")
+```
+
+  - Bayesian approach based on the chosen prior in part (f): also in this case 0.1 falls inside the 95% credibility interval
+  
+```{r 3h Bayesian plot }
+alpha <- 21
+beta <- 271
+
+beta_posterior <- function(p) sapply(p, function(x) dbeta(x, alpha, beta))
+
+mean <- getBetaMean(alpha, beta)
+SD   <- getBetaSD  (alpha, beta)
+
+curve(beta_posterior, from = 0, to=1, n = 1000, xlim = c(0,0.17), main="Bayesian posterior of p", xlab="p", ylab = "probability density", col=color_vector[1], lwd=3, ylim = c(0, 30))
+
+beta_95_interval <- sapply(c(0.025, 0.975), function(p) qbeta(p, alpha, beta))
+x_plot <- seq(beta_95_interval[1], beta_95_interval[2], length.out=1000)
+y_plot <- c(0, beta_posterior(x_plot[2:999]), 0)
+
+polygon(x_plot, y_plot, col = adjustcolor(color_vector[5], alpha.f = 0.5), border = NA)
+
+abline(v = mean, col = color_vector[7], lty=2, lwd = 3)
+abline(v = mean - SD, col = color_vector[6], lty = 3, lwd = 3)
+abline(v = mean + SD, col = color_vector[6], lty = 3, lwd = 3)
+
+legend('topright', legend = c('mean', 'mean ± std'), lty = c(2, 3, 3), lwd=3, col = c(color_vector[7], color_vector[6], color_vector[6]))
+
+legend('right', legend = '95% credibility interval', fill = adjustcolor(color_vector[5], alpha.f = 0.5))
+
+
+writeLines(sprintf(
+  'The 95%% credibility interval for the posterior is [ %.3f , %.3f ]', beta_95_interval[1], beta_95_interval[2]))
+```
+
+# Exercise 4: Water Quality and Bacter X Levels in Streams with STAN
+
+Let's consider the first set of measurements:
+
+  - n = 116 water samples collected from streams with high environmental impact.
+  - y = 11 samples with a high bacter X level.
+  
+```{r 4c}
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+
+n <- 116
+y <- 11
+
+dataList= list(n=n, y = y)
+
+modelString  = 
+  " 
+    data {
+      int <lower=0> n; 
+      int <lower=0> y;
+    } 
+    
+    parameters { 
+      real <lower=0, upper=1> p; 
+    } 
+    
+    model { 
+      p ~ beta (1, 10);
+      y ~ binomial (n, p); 
+    }
+  "
+
+stanDso <- stan_model ( model_code = modelString )
+
+stanFit <- sampling ( object = stanDso , 
+                      data = dataList , 
+                      chains = 2 , 
+                      iter = 5000 , 
+                      warmup = 200 , 
+                      thin = 1)
+stanPosterior <- as.array(stanFit)
+
+inspect_chains(stanFit, stanPosterior, "p")
+```
+Considering instead the second set of measurements:
+
+  - n = 165 water samples collected from streams with high environmental impact.
+  - y = 9 samples with a high bacter X level.
+  
+Using a Beta(1, 10) prior:
+
+```{r 4g}
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+
+n <- 165
+y <- 9
+
+dataList= list(n=n, y = y)
+
+modelString  = 
+  " 
+    data {
+      int <lower=0> n; 
+      int <lower=0> y;
+    } 
+    
+    parameters { 
+      real <lower=0, upper=1> p; 
+    } 
+    
+    model { 
+      p ~ beta (1, 10);
+      y ~ binomial (n, p); 
+    }
+  "
+
+stanDso <- stan_model ( model_code = modelString )
+
+stanFit <- sampling ( object = stanDso , 
+                      data = dataList , 
+                      chains = 2 , 
+                      iter = 5000 , 
+                      warmup = 200 , 
+                      thin = 1)
+stanPosterior <- as.array(stanFit)
+
+inspect_chains(stanFit, stanPosterior, "p")
+```
+Using instead the results of the previous experiment as a prior for the new one:
+
+```{r 4g bis}
+options(mc.cores = parallel::detectCores())
+rstan_options(auto_write = TRUE)
+
+n <- 165
+y <- 9
+
+dataList= list(n=n, y = y)
+
+modelString  = 
+  " 
+    data {
+      int <lower=0> n; 
+      int <lower=0> y;
+    } 
+    
+    parameters { 
+      real <lower=0, upper=1> p; 
+    } 
+    
+    model { 
+      p ~ beta (12, 115);
+      y ~ binomial (n, p); 
+    }
+  "
+
+stanDso <- stan_model ( model_code = modelString )
+
+stanFit <- sampling ( object = stanDso , 
+                      data = dataList , 
+                      chains = 2 , 
+                      iter = 5000 , 
+                      warmup = 200 , 
+                      thin = 1)
+stanPosterior <- as.array(stanFit)
+
+inspect_chains(stanFit, stanPosterior, "p")
+```
+
