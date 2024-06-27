@@ -380,7 +380,7 @@ Tasks:
 (c) Bayesian Estimator and Credible Interval:
 
   - Considering the mean as the Bayesian estimator for p, $E[p] = \frac{\alpha}{\alpha+\beta} = \frac{12}{127}=9.5\%$.
-  - The posterior variance of p is $SD[p] 0.03 = \sqrt{\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}} = $
+  - The posterior variance of p is $SD[p] = \sqrt{\frac{\alpha\beta}{(\alpha+\beta)^2(\alpha+\beta+1)}} = 0.03$
   - Computing a 95% credible interval for p:
   
 
@@ -438,7 +438,7 @@ binom.test(x=11, n = 116, p = 0.1, alternative = "two.sided")
 
 (g) New Measurement - Bayesian Estimators:
 
-  - Assuming a Beta(1, 10) prior distribution for p, the posterior is $\text{Beta}(10, 166)$, so considering the mean as the best estimator we obtain: $E[p] = \frac {\alpha}{\alpha + \beta} = 5.7\% $
+  - Assuming a Beta(1, 10) prior distribution for p, the posterior is $\text{Beta}(10, 166)$, so considering the mean as the best estimator we obtain: $E[p] = \frac{\alpha}{\alpha + \beta} = 5.7\% $
   
   - Considering instead the posterior probability from part (c) as the prior for the new data, the posterior becomes $\text{Beta}(21, 271)$, thus the estimator for p becomes $p = 7.2\%$.
 
